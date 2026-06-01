@@ -11,20 +11,20 @@
             <link rel="stylesheet" href="<?= URLROOT ?>css/<?= htmlspecialchars($styleFile); ?>">
         <?php endforeach; ?>
     <?php endif; ?>
-    <title><?= htmlspecialchars($data['documentTitle'] ?? $data['title'] ?? 'Aurora Theater'); ?></title>
+    <title><?= htmlspecialchars(isset($data['documentTitle']) && $data['documentTitle'] !== '' ? $data['documentTitle'] : (isset($data['title']) && $data['title'] !== '' ? $data['title'] : 'Aurora Theater')); ?></title>
 </head>
 <body>
 
 <?php
-$activePage    = $data['activePage'] ?? '';
+$activePage    = isset($data['activePage']) ? $data['activePage'] : '';
 
 // Sessiegegevens gebruiken we voor de profielknop rechtsboven.
 $isIngelogd    = isset($_SESSION['account_id']);
-$voornaam      = $_SESSION['voornaam'] ?? '';
-$tussenvoegsel = $_SESSION['tussenvoegsel'] ?? '';
-$achternaam    = $_SESSION['achternaam'] ?? '';
-$rol           = strtolower($_SESSION['rol'] ?? '');
-$accountId     = (int)($_SESSION['account_id'] ?? 0);
+$voornaam      = isset($_SESSION['voornaam']) ? $_SESSION['voornaam'] : '';
+$tussenvoegsel = isset($_SESSION['tussenvoegsel']) ? $_SESSION['tussenvoegsel'] : '';
+$achternaam    = isset($_SESSION['achternaam']) ? $_SESSION['achternaam'] : '';
+$rol           = strtolower(isset($_SESSION['rol']) ? $_SESSION['rol'] : '');
+$accountId     = isset($_SESSION['account_id']) ? (int)$_SESSION['account_id'] : 0;
 
 $initialen = '';
 if ($voornaam !== '' || $achternaam !== '') {
@@ -56,8 +56,8 @@ $dropdownNaam = trim(implode(' ', array_filter([$voornaam, $tussenvoegsel, $acht
             <?php // Hoofdmenu met actieve markering op basis van de huidige pagina. ?>
             <ul>
                 <li><a href="<?= URLROOT ?>Homepages/index" <?= $activePage === 'home' ? 'class="active"' : '' ?>>Home</a></li>
-                <li><a href="#bezoekers" <?= $activePage === 'bezoekers' ? 'class="active"' : '' ?>>Bezoekers</a></li>
-                <li><a href="#medewerkers" <?= $activePage === 'medewerkers' ? 'class="active"' : '' ?>>Medewerkers</a></li>
+                <li><a href="<?= URLROOT ?>Homepages/index#bezoekers" <?= $activePage === 'bezoekers' ? 'class="active"' : '' ?>>Bezoekers</a></li>
+                <li><a href="<?= URLROOT ?>Homepages/index#medewerkers" <?= $activePage === 'medewerkers' ? 'class="active"' : '' ?>>Medewerkers</a></li>
                 <?php if ($isIngelogd) : ?>
                     <li><a href="#" class="nav-knop">Dashboard</a></li>
                 <?php else : ?>
@@ -98,5 +98,7 @@ $dropdownNaam = trim(implode(' ', array_filter([$voornaam, $tussenvoegsel, $acht
 </header>
 
 <div class="page-main">
+
+
 
 
