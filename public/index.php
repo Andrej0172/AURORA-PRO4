@@ -1,2 +1,4 @@
 <?php
-require_once '../app/require.php';
+require_once __DIR__ . '/../app/require.php';
+
+?>
