@@ -18,27 +18,47 @@ class AccountsController extends BaseController
         }
 
         $accountId = (int)$_SESSION['account_id'];
+
+        // Simuleer databasefout via constante (voor testdoeleinden)
+        if (defined('OVERZICHT_FOUT') && OVERZICHT_FOUT === true) {
+            $this->view('accounts/index', [
+                'title'         => 'Mijn Account - Aurora Theater',
+                'documentTitle' => 'Aurora Theater - Account',
+                'activePage'    => '',
+                'styles'        => ['accounts.css'],
+                'accountId'     => $accountId,
+                'foutmelding'   => 'Accounts konden niet worden geladen. Probeer opnieuw.',
+                'account'       => null
+            ]);
+            return;
+        }
+
+        // Status bijwerken (bijv. Actief → Verlopen) voordat we de data ophalen.
         $this->accountModel->checkEnUpdateStatus($accountId);
         $account = $this->accountModel->getAccountById($accountId);
 
+        // Account niet gevonden (bijv. verwijderd) → terugsturen naar login.
         if ($account === null) {
             header('Location: ' . URLROOT . 'AccountsController/login');
             exit;
         }
 
+        // Leeftijd berekenen op basis van geboortedatum.
         $geboortedatum = !empty($account['geboortedatum']) ? new DateTime($account['geboortedatum']) : null;
         $leeftijd      = $geboortedatum ? $geboortedatum->diff(new DateTime())->y : 0;
 
+        // Aantal maanden als lid berekenen op basis van startdatum.
         $startDatum = !empty($account['start_datum']) ? new DateTime($account['start_datum']) : null;
         $lidDuur    = $startDatum ? $startDatum->diff(new DateTime()) : null;
         $lidMaanden = $lidDuur ? ($lidDuur->y * 12) + $lidDuur->m : 0;
 
         $this->view('accounts/index', [
-            'title'         => 'Mijn Account - FitForFun',
-            'documentTitle' => 'FitForFun - Account',
+            'title'         => 'Mijn Account - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - Account',
             'activePage'    => '',
             'styles'        => ['accounts.css'],
             'accountId'     => $accountId,
+            'foutmelding'   => '',
             'headerAccount' => [
                 'voornaam'   => $account['voornaam'],
                 'achternaam' => $account['achternaam'],
@@ -105,8 +125,8 @@ class AccountsController extends BaseController
         $reserveringen = $this->accountModel->getReserveringenByAccountId($accountId);
 
         $this->view('accounts/reserveringen', [
-            'title'         => 'Mijn reserveringen - FitForFun',
-            'documentTitle' => 'FitForFun - Reserveringen',
+            'title'         => 'Mijn reserveringen - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - Reserveringen',
             'activePage'    => '',
             'styles'        => ['accounts.css', 'reserveringen.css'],
             'accountId'     => $accountId,
@@ -120,14 +140,27 @@ class AccountsController extends BaseController
     public function login()
     {
         // POST = inlogpoging verwerken, GET = leeg formulier tonen.
-        // Login validatie
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email      = trim(isset($_POST['email']) ? $_POST['email'] : '');
             $wachtwoord = isset($_POST['wachtwoord']) ? $_POST['wachtwoord'] : '';
 
+            // Unhappy scenario: e-mailformaat ongeldig → foutmelding, geen DB-query nodig.
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->view('accounts/login', [
+                    'title'         => 'Inloggen - Aurora Theater',
+                    'documentTitle' => 'Aurora Theater - Inloggen',
+                    'activePage'    => '',
+                    'styles'        => ['accounts.css'],
+                    'foutmelding'   => 'Ongeldige inloggegevens. Probeer het opnieuw.',
+                    'email'         => $email
+                ]);
+                return;
+            }
+
+            // Happy scenario: account opzoeken en wachtwoord verifiëren.
             $account = $this->accountModel->getAccountByEmail($email);
 
-            // Check wachtwoord en zet sessie
+            // Wachtwoord klopt → sessie aanmaken en doorsturen naar dashboard.
             if ($account !== null && isset($account['wachtwoord']) && password_verify($wachtwoord, $account['wachtwoord'])) {
                 $_SESSION['account_id'] = (int)$account['id'];
                 $_SESSION['voornaam']   = $account['voornaam'];
@@ -135,7 +168,7 @@ class AccountsController extends BaseController
                 $_SESSION['achternaam'] = $account['achternaam'];
                 $_SESSION['rol']        = $account['rol'];
 
-                // Remember token opslaan
+                // "Onthoud mij" aangevinkt → token genereren en opslaan als cookie (30 dagen).
                 if (!empty($_POST['onthoud_mij'])) {
                     $token = bin2hex(random_bytes(32));
                     $this->accountModel->saveRememberToken((int)$account['id'], hash('sha256', $token));
@@ -152,19 +185,19 @@ class AccountsController extends BaseController
             }
 
             $this->view('accounts/login', [
-                'title'         => 'Inloggen - FitForFun',
-                'documentTitle' => 'FitForFun - Inloggen',
+                'title'         => 'Inloggen - Aurora Theater',
+                'documentTitle' => 'Aurora Theater - Inloggen',
                 'activePage'    => '',
                 'styles'        => ['accounts.css'],
-                'foutmelding'   => 'Onjuist e-mailadres of wachtwoord.',
+                'foutmelding'   => 'Ongeldige inloggegevens. Probeer het opnieuw.',
                 'email'         => $email
             ]);
             return;
         }
 
         $this->view('accounts/login', [
-            'title'         => 'Inloggen - FitForFun',
-            'documentTitle' => 'FitForFun - Inloggen',
+            'title'         => 'Inloggen - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - Inloggen',
             'activePage'    => '',
             'styles'        => ['accounts.css'],
             'foutmelding'   => '',
@@ -292,8 +325,8 @@ class AccountsController extends BaseController
             }
 
             $this->view('accounts/aanmelden', [
-                'title'          => 'Aanmelden - FitForFun',
-                'documentTitle'  => 'FitForFun - Aanmelden',
+                'title'          => 'Aanmelden - Aurora Theater',
+                'documentTitle'  => 'Aurora Theater - Aanmelden',
                 'activePage'     => '',
                 'styles'         => ['accounts.css'],
                 'foutmelding'    => $fout,
@@ -304,8 +337,8 @@ class AccountsController extends BaseController
         }
 
         $this->view('accounts/aanmelden', [
-            'title'          => 'Aanmelden - FitForFun',
-            'documentTitle'  => 'FitForFun - Aanmelden',
+            'title'          => 'Aanmelden - Aurora Theater',
+            'documentTitle'  => 'Aurora Theater - Aanmelden',
             'activePage'     => '',
             'styles'         => ['accounts.css'],
             'foutmelding'    => '',
@@ -331,8 +364,8 @@ class AccountsController extends BaseController
 
         $isFout = !empty($_SESSION['instellingen_fout']);
         $this->view('accounts/instellingen', [
-            'title'         => 'Instellingen - FitForFun',
-            'documentTitle' => 'FitForFun - Instellingen',
+            'title'         => 'Instellingen - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - Instellingen',
             'activePage'    => '',
             'styles'        => ['accounts.css'],
             'account'       => $account,
@@ -373,8 +406,8 @@ class AccountsController extends BaseController
         if ($fout !== '') {
             $account = $this->accountModel->getAccountById($accountId);
             $this->view('accounts/instellingen', [
-                'title'         => 'Instellingen - FitForFun',
-                'documentTitle' => 'FitForFun - Instellingen',
+                'title'         => 'Instellingen - Aurora Theater',
+                'documentTitle' => 'Aurora Theater - Instellingen',
                 'activePage'    => '',
                 'styles'        => ['accounts.css'],
                 'account'       => $account,
@@ -388,8 +421,8 @@ class AccountsController extends BaseController
         if ($binaryData === false) {
             $account = $this->accountModel->getAccountById($accountId);
             $this->view('accounts/instellingen', [
-                'title'         => 'Instellingen - FitForFun',
-                'documentTitle' => 'FitForFun - Instellingen',
+                'title'         => 'Instellingen - Aurora Theater',
+                'documentTitle' => 'Aurora Theater - Instellingen',
                 'activePage'    => '',
                 'styles'        => ['accounts.css'],
                 'account'       => $account,
@@ -434,15 +467,45 @@ class AccountsController extends BaseController
         exit;
     }
 
+    // Overzicht van alle accounts (alleen medewerkers)
+    public function overzicht()
+    {
+        if (!isset($_SESSION['account_id'])) {
+            header('Location: ' . URLROOT . 'AccountsController/login');
+            exit;
+        }
+
+        if ($_SESSION['rol'] !== 'medewerker') {
+            header('Location: ' . URLROOT . 'AccountsController/index');
+            exit;
+        }
+
+        $accounts = $this->accountModel->getAllAccounts();
+
+        $this->view('accounts/overzicht', [
+            'title'         => 'Accountenoverzicht - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - Accountenoverzicht',
+            'activePage'    => '',
+            'styles'        => ['accounts.css'],
+            'headerAccount' => [
+                'voornaam'   => $_SESSION['voornaam'],
+                'achternaam' => $_SESSION['achternaam'],
+                'rol'        => $_SESSION['rol']
+            ],
+            'accounts'      => $accounts
+        ]);
+    }
+
     // Uitloggen en sessie opruimen
     public function logout()
     {
+        // Unhappy scenario: serverfout gesimuleerd via constante → foutpagina tonen, sessie blijft actief.
         if (defined('LOGOUT_ERROR') && LOGOUT_ERROR === true) {
             header('Location: ' . URLROOT . 'Homepages/logoutError');
             exit;
         }
 
-        // Verwijder remember token
+        // Happy scenario: remember-cookie verwijderen zodat auto-login niet meer werkt.
         setcookie('remember_token', '', [
             'expires'  => time() - 3600,
             'path'     => '/',
@@ -450,7 +513,7 @@ class AccountsController extends BaseController
             'samesite' => 'Lax'
         ]);
 
-        // Sessie opruimen
+        // Sessie leegmaken en vernietigen, daarna doorsturen naar loginpagina.
         $_SESSION = [];
         session_destroy();
         header('Location: ' . URLROOT . 'AccountsController/login');

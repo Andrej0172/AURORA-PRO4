@@ -1,5 +1,13 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
+<?php if (!empty($data['foutmelding'])) : ?>
+<div class="account-page">
+    <div class="account-alert account-alert-error"><?= htmlspecialchars($data['foutmelding']); ?></div>
+</div>
+<?php require_once APPROOT . '/views/includes/footer.php'; ?>
+<?php return; ?>
+<?php endif; ?>
+
 <?php
 $voornaam = isset($data['account']['voornaam']) ? $data['account']['voornaam'] : '';
 $email = isset($data['account']['email']) ? $data['account']['email'] : '';

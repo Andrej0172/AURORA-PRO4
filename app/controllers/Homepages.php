@@ -23,6 +23,17 @@ class Homepages extends BaseController
             'styles'        => ['errors.css']
         ]);
     }
+
+    // Uitloggen mislukt pagina – sessie blijft actief
+    public function logoutError()
+    {
+        $this->view('errors/logout-fout', [
+            'title'         => 'Uitloggen mislukt - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - Uitloggen mislukt',
+            'activePage'    => '',
+            'styles'        => ['errors.css']
+        ]);
+    }
 }
 
 

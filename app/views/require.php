@@ -59,8 +59,8 @@ if (!isset($_SESSION['account_id']) && !empty($_COOKIE['remember_token'])) {
 // Onderhoudsmodus check
 if (ONDERHOUD) {
     $data = [
-        'title'         => 'FitForFun - Onderhoud',
-        'documentTitle' => 'FitForFun - Onderhoud',
+        'title'         => 'Aurora Theater - Onderhoud',
+        'documentTitle' => 'Aurora Theater - Onderhoud',
         'activePage'    => '',
         'styles'        => ['errors.css']
     ];

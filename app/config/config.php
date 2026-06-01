@@ -18,3 +18,9 @@ define('APPROOT', dirname(dirname(__FILE__))); // absoluut pad naar de app-map
 
 // Zet op true om de onderhoudspagina voor iedereen te tonen
 define('ONDERHOUD', false);
+
+// Zet op true om de logout-fout pagina te simuleren (voor testdoeleinden)
+define('LOGOUT_ERROR', false);
+
+// Zet op true om de databasefout in het accountenoverzicht te simuleren (voor testdoeleinden)
+define('OVERZICHT_FOUT', false);

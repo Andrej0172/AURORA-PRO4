@@ -5,20 +5,24 @@
         <h1>Inloggen</h1>
         <p class="account-auth-subtitle">Log in op je Aurora Theater account.</p>
 
+        <?php // Foutmelding tonen bij onjuiste inloggegevens of ongeldig e-mailformaat. ?>
         <?php if (!empty($data['foutmelding'])) : ?>
             <div class="account-alert account-alert-error"><?= htmlspecialchars($data['foutmelding']); ?></div>
         <?php endif; ?>
 
+        <?php // Formulier verstuurt naar de login-methode; browser-validatie is uitgeschakeld zodat onze eigen foutmeldingen getoond worden. ?>
         <form action="<?= URLROOT; ?>AccountsController/login" method="POST" class="account-form">
             <div class="form-groep">
                 <label for="email">E-mailadres</label>
-                    <input type="email" id="email" name="email" required value="<?= htmlspecialchars(isset($data['email']) ? $data['email'] : ''); ?>" placeholder="naam@voorbeeld.nl">
+                <?php // type="text" zodat de browser geen eigen popup toont; validatie gebeurt server-side. ?>
+                <input type="text" id="email" name="email" value="<?= htmlspecialchars(isset($data['email']) ? $data['email'] : ''); ?>" placeholder="naam@voorbeeld.nl">
             </div>
 
             <div class="form-groep">
                 <label for="wachtwoord">Wachtwoord</label>
                 <div class="wachtwoord-wrapper">
-                    <input type="password" id="wachtwoord" name="wachtwoord" required placeholder="Je wachtwoord">
+                    <input type="password" id="wachtwoord" name="wachtwoord" placeholder="Je wachtwoord">
+                    <?php // Knop om wachtwoord zichtbaar of verborgen te maken via JavaScript. ?>
                     <button type="button" class="wachtwoord-toggle" id="wachtwoordToggle" aria-label="Wachtwoord tonen">
                         <svg class="oog-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
@@ -34,6 +38,7 @@
                 </div>
             </div>
 
+            <?php // Checkbox voor "Onthoud mij" – slaat een 30-dagen cookie op via de controller. ?>
             <div class="form-groep onthoud-mij">
                 <label>
                     <input type="checkbox" name="onthoud_mij" value="1">
@@ -47,5 +52,3 @@
 </div>
 
 <?php require_once APPROOT . '/views/includes/footer.php'; ?>
-
-
