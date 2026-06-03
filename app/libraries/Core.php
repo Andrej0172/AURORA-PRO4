@@ -40,8 +40,8 @@ class Core
     private function renderNotFound()
     {
         $data = [
-            'title'         => '404 - FitForFun',
-            'documentTitle' => 'FitForFun - 404',
+            'title'         => '404 - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - 404',
             'message'       => 'De gevraagde pagina of route bestaat niet.',
             'activePage'    => '',
             'styles'        => ['errors.css']
