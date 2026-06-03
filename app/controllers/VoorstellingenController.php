@@ -1,6 +1,8 @@
 <?php
+// Controller voor het overzicht van theatervoorstellingen.
 class VoorstellingenController extends BaseController
 {
+    // Toon de voorstellingenpagina (HTML shell; data wordt via AJAX opgehaald).
     public function index()
     {
         $this->view('voorstellingen/index', [
@@ -10,6 +12,7 @@ class VoorstellingenController extends BaseController
         ]);
     }
 
+    // JSON-endpoint dat de voorstellingenlijst teruggeeft voor de frontend.
     public function data()
     {
         header('Content-Type: application/json; charset=utf-8');

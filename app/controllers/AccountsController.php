@@ -105,6 +105,7 @@ class AccountsController extends BaseController
         exit;
     }
 
+    // Toon reserveringenoverzicht van de ingelogde gebruiker.
     public function reserveringen()
     {
         // Laad altijd eerst accountheader; die wordt ook in de layout gebruikt.
@@ -205,6 +206,7 @@ class AccountsController extends BaseController
         ]);
     }
 
+    // Verwerk abonnementwijzigingen (instellen, verlengen, pauzeren, opzeggen).
     public function abonnement()
     {
         // Alle abonnement-acties lopen via dezelfde endpoint met een actie-naam.
@@ -347,6 +349,7 @@ class AccountsController extends BaseController
         ]);
     }
 
+    // Toon de instellingenpagina en verwerk eventuele sessiemeldingen.
     public function instellingen()
     {
         // Instellingen zijn persoonlijk; daarom altijd op sessieaccount laden.
@@ -376,6 +379,7 @@ class AccountsController extends BaseController
         unset($_SESSION['instellingen_melding'], $_SESSION['instellingen_fout']);
     }
 
+    // Verwerk het uploaden van een profielfoto (validatie + opslag als BLOB).
     public function uploadFoto()
     {
         // Upload foutafhandeling blijft in deze method, opslag zit in het model.

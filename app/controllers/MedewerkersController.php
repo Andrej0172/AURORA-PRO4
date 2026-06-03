@@ -1,6 +1,8 @@
 <?php
+// Controller voor het medewerkersoverzicht; alleen toegankelijk voor gebruikers met rol 'medewerker'.
 class MedewerkersController extends BaseController
 {
+    // Toon de medewerkerspagina (HTML shell; data wordt via AJAX opgehaald).
     public function index()
     {
         // Alleen ingelogde medewerkers mogen het medewerkersoverzicht zien.

@@ -1,4 +1,5 @@
 <?php
+// Model voor lessen uit de AuroraDb-database via de Database-wrapper.
 class Les
 {
 	private $db;
@@ -8,10 +9,12 @@ class Les
 		try {
 			$this->db = new Database();
 		} catch (Exception $e) {
+			// Database niet beschikbaar; methodes geven lege resultaten terug.
 			$this->db = null;
 		}
 	}
 
+	// Haal een beperkte selectie lessen op voor de homepage-weergave.
 	public function getLessenSamenvatting()
 	{
 		try {

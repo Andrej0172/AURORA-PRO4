@@ -43,7 +43,7 @@ class Database
         $this->statement->bindValue($p, $v, $t);
     }
 
-    // Voer query uit en haal alle resultaten op
+    // Voer query uit en haal alle resultaten op als array van objecten.
     public function resultSet()
     {
         if ($this->statement === null) {
