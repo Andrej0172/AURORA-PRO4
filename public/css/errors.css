@@ -1,0 +1,68 @@
+.error-wrapper,
+.onderhoud-wrapper {
+    min-height: calc(100vh - 72px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: #f5f5f5;
+}
+
+.error-logo,
+.onderhoud-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 40px;
+    letter-spacing: 0.5px;
+}
+
+.error-logo .logo-fit,
+.onderhoud-logo .logo-fit {
+    color: #c43b2f;
+}
+
+.error-logo .logo-fun,
+.onderhoud-logo .logo-fun {
+    color: #111;
+}
+
+.error-box,
+.onderhoud-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 50px 40px;
+    max-width: 480px;
+    width: 100%;
+}
+
+.error-code {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #c43b2f;
+    line-height: 1;
+    margin-bottom: 16px;
+}
+
+.error-box h1,
+.onderhoud-box h1 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    color: #111;
+}
+
+.error-box p,
+.onderhoud-box p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 28px;
+}
+
+.onderhoud-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+

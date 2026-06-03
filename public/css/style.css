@@ -1,0 +1,567 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img.emoji {
+    height: 1em;
+    width: 1em;
+    vertical-align: -0.1em;
+    display: inline-block;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f7f7f7;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-main {
+    flex: 1;
+}
+
+
+/* ===== HEADER ===== */
+.header {
+    background: #0f0f0f;
+    padding: 0 2rem;
+    height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-rij {
+    max-width: 1200px;
+    margin: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* Logo */
+.logo a {
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.logo a .logo-fit,
+.logo-fit { color: #c43b2f; }
+
+.logo a .logo-fun,
+.logo-fun { color: #ffffff; }
+
+.logo a .logo-for,
+.logo-for {
+    font-size: 0.7em;
+    font-weight: 400;
+    color: #666;
+}
+
+/* Nav */
+.nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav ul li a {
+    text-decoration: none;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 3px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.nav ul li a:hover,
+.nav ul li a.active {
+    color: #ffffff;
+    border-bottom-color: #c43b2f;
+}
+
+.nav ul li a.nav-knop {
+    background: #c43b2f;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    border-bottom: none;
+    transition: background 0.2s;
+}
+
+.nav ul li a.nav-knop:hover {
+    background: #a83026;
+    color: white;
+}
+
+/* Profiel knop */
+.profiel-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profiel {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #c43b2f;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0;
+}
+
+.profiel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profiel-initialen {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.profiel:hover {
+    background: #a83026;
+}
+
+/* Profiel dropdown */
+.profiel-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    min-width: 210px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    z-index: 200;
+    overflow: hidden;
+}
+
+.profiel-dropdown.open {
+    display: block;
+}
+
+.profiel-dropdown .dropdown-naam {
+    display: block;
+    padding: 14px 16px 12px;
+    color: #111;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.profiel-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.15s, color 0.15s;
+}
+
+.profiel-dropdown a:hover {
+    background: #fdf2f1;
+    color: #c43b2f;
+}
+
+.profiel-dropdown hr {
+    margin: 4px 0;
+    border: none;
+    border-top: 1px solid #f0f0f0;
+}
+
+.profiel-dropdown a.dropdown-uitloggen {
+    color: #c43b2f;
+}
+
+.profiel-dropdown a.dropdown-uitloggen:hover {
+    background: #fdf2f1;
+    color: #a83026;
+}
+
+/* Login pagina */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 72px - 200px);
+    padding: 2rem;
+}
+
+.login-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.login-box h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+    color: #111;
+}
+
+.login-subtitel {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.login-fout {
+    background: #fdecea;
+    color: #c43b2f;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 1.2rem;
+}
+
+.login-succes {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 1.2rem;
+}
+
+.login-wissel {
+    text-align: center;
+    margin-top: 1.2rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.login-wissel a {
+    color: #c43b2f;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-wissel a:hover {
+    text-decoration: underline;
+}
+
+.form-groep {
+    margin-bottom: 1.2rem;
+}
+
+.form-groep label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+    color: #333;
+}
+
+.form-groep input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.form-groep input:focus,
+.form-groep select:focus {
+    outline: none;
+    border-color: #c43b2f;
+}
+
+.form-groep select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: #fff;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.login-knop {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.wachtwoord-wrapper {
+    position: relative;
+}
+
+.wachtwoord-wrapper input {
+    padding-right: 44px;
+}
+
+.wachtwoord-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.wachtwoord-toggle:hover {
+    color: #c43b2f;
+}
+
+.onthoud-mij label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: #555;
+    cursor: pointer;
+}
+
+.onthoud-mij input[type="checkbox"] {
+    width: auto;
+    accent-color: #c43b2f;
+}
+
+/* Menu knop */
+.menu-knop {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 20;
+}
+
+.menu-knop span {
+    display: block;
+    width: 26px;
+    height: 3px;
+    background: #fff;
+    margin: 5px 0;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.menu-knop.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.menu-knop.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-knop.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ===== TABEL SCROLL ===== */
+.tabel-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===== KNOPPEN ===== */
+.btn {
+    display: inline-block;
+    padding: 13px 30px;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-primary {
+    background: #c43b2f;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #a83026;
+}
+
+.btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.7);
+}
+
+.btn-outline:hover {
+    background: white;
+    color: #111;
+    border-color: white;
+}
+
+.btn-secundair {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.btn-secundair:hover {
+    background: #ddd;
+}
+
+.btn-waarschuwing {
+    background: #f39c12;
+    color: white;
+}
+
+.btn-waarschuwing:hover {
+    background: #d68910;
+}
+
+.btn-gevaar {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-gevaar:hover {
+    background: #c0392b;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: #0f0f0f;
+    color: #999;
+    padding: 50px 20px 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 2;
+}
+
+.footer a {
+    color: #999;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+.footer-midden {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    margin-top: 30px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+}
+
+.footer-logo .logo-fit { color: #c43b2f; }
+.footer-logo .logo-for { color: #555; font-size: 0.75em; font-weight: 400; }
+.footer-logo .logo-fun { color: white; }
+
+.copyright {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: #444;
+}
+
+/* ===== MOBIEL ===== */
+@media (max-width: 768px) {
+    .menu-knop {
+        display: block;
+        order: 3; /* Hamburger rechts van de accountknop */
+    }
+
+    .profiel-wrapper {
+        order: 2; /* Account links van de hamburger */
+        margin-left: auto; /* Duwt account + hamburger naar rechts */
+    }
+
+    .nav {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: #0f0f0f;
+        border-bottom: 1px solid #222;
+        padding: 1rem 2rem;
+    }
+
+    .nav.menu-open {
+        display: block;
+    }
+
+    .nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+    }
+
+    .nav ul li {
+        width: 100%;
+    }
+
+    .nav ul li a {
+        display: block;
+        padding: 13px 0;
+        border-bottom: 1px solid #1e1e1e;
+    }
+
+    .nav ul li:last-child a {
+        border-bottom: none;
+    }
+
+    .nav ul li a.nav-knop {
+        padding: 13px 0;
+        background: none;
+        color: #c43b2f;
+        border-radius: 0;
+    }
+}
+
