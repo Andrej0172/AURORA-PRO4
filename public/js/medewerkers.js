@@ -1,12 +1,11 @@
-// Tijdelijke data — vervang dit later met een fetch() naar get_medewerkers.php
 const avatarColors = [
-  { bg: '#0c1e35', txt: '#85b7eb' },
-  { bg: '#1a1733', txt: '#afa9ec' },
-  { bg: '#051f14', txt: '#5dcaa5' },
-  { bg: '#2a1c05', txt: '#ef9f27' },
-  { bg: '#0f2209', txt: '#97c459' },
-  { bg: '#1e0b0c', txt: '#f09595' },
-  { bg: '#1f0a12', txt: '#ed93b1' },
+  { bg: '#fdecea', txt: '#c43b2f' },
+  { bg: '#e8f0fe', txt: '#1a73e8' },
+  { bg: '#e6f4ea', txt: '#2e7d32' },
+  { bg: '#fff3e0', txt: '#e65100' },
+  { bg: '#f3e5f5', txt: '#7b1fa2' },
+  { bg: '#fce4ec', txt: '#c2185b' },
+  { bg: '#e0f7fa', txt: '#00838f' },
 ];
 
 const afdelingClass = {
@@ -17,15 +16,7 @@ const afdelingClass = {
   'Marketing':  'badge-marketing',
 };
 
-const medewerkers = [
-  { naam: 'Sophie de Vries',   functie: 'Regisseur',        afdeling: 'Artistiek' },
-  { naam: 'Lars Bakker',       functie: 'Acteur',            afdeling: 'Artistiek' },
-  { naam: 'Noor van den Berg', functie: 'Lichtontwerper',    afdeling: 'Techniek'  },
-  { naam: 'Daan Janssen',      functie: 'Geluidsontwerper',  afdeling: 'Techniek'  },
-  { naam: 'Emma Smit',         functie: 'Kostuumontwerper',  afdeling: 'Kostuums'  },
-  { naam: 'Tim Visser',        functie: 'Productieleider',   afdeling: 'Productie' },
-  { naam: 'Lisa Meijer',       functie: 'Marketingmanager',  afdeling: 'Marketing' },
-];
+let medewerkers = [];
 
 function initials(naam) {
   const parts = naam.split(' ');
@@ -71,4 +62,23 @@ function filterTable() {
   renderTable(gefilterd);
 }
 
-renderTable(medewerkers);
+fetch(dataUrl)
+  .then(res => {
+    if (!res.ok) throw new Error('Networkfout: ' + res.status);
+    return res.json();
+  })
+  .then(data => {
+    medewerkers = data;
+    document.getElementById('totalCount').textContent = medewerkers.length;
+
+    const afdelingen = [...new Set(medewerkers.map(m => m.afdeling))];
+    document.getElementById('afdelingCount').textContent = afdelingen.length;
+
+    renderTable(medewerkers);
+  })
+  .catch(err => {
+    console.error('Fout bij ophalen medewerkers:', err);
+    const empty = document.getElementById('emptyState');
+    empty.style.display = 'block';
+    empty.querySelector('p').textContent = 'Kon medewerkers niet laden.';
+  });

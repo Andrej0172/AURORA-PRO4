@@ -56,8 +56,10 @@ $dropdownNaam = trim(implode(' ', array_filter([$voornaam, $tussenvoegsel, $acht
             <?php // Hoofdmenu met actieve markering op basis van de huidige pagina. ?>
             <ul>
                 <li><a href="<?= URLROOT ?>Homepages/index" <?= $activePage === 'home' ? 'class="active"' : '' ?>>Home</a></li>
-                <li><a href="<?= URLROOT ?>Homepages/index#bezoekers" <?= $activePage === 'bezoekers' ? 'class="active"' : '' ?>>Bezoekers</a></li>
-                <li><a href="<?= URLROOT ?>Homepages/index#medewerkers" <?= $activePage === 'medewerkers' ? 'class="active"' : '' ?>>Medewerkers</a></li>
+                <li><a href="<?= URLROOT ?>VoorstellingenController/index" <?= $activePage === 'voorstellingen' ? 'class="active"' : '' ?>>Voorstellingen</a></li>
+                <?php if ($rol === 'medewerker') : ?>
+                    <li><a href="<?= URLROOT ?>MedewerkersController/index" <?= $activePage === 'medewerkers' ? 'class="active"' : '' ?>>Medewerkers</a></li>
+                <?php endif; ?>
                 <?php if ($isIngelogd) : ?>
                     <li><a href="#" class="nav-knop">Dashboard</a></li>
                 <?php else : ?>

@@ -1,0 +1,180 @@
+.medewerkers-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.topbar h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar h1 i {
+  font-size: 20px;
+  color: #c43b2f;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 7px 14px;
+  width: 230px;
+}
+
+.search-bar i {
+  font-size: 15px;
+  color: #aaa;
+}
+
+.search-bar input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: #222;
+  width: 100%;
+}
+
+.search-bar input::placeholder {
+  color: #bbb;
+}
+
+/* Stat cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.stat-card .value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+}
+
+/* Tabel */
+.table-wrap {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.medewerkers-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.medewerkers-container thead tr {
+  background: #fafafa;
+}
+
+.medewerkers-container th {
+  padding: 11px 18px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #999;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.medewerkers-container td {
+  padding: 13px 18px;
+  color: #222;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.medewerkers-container tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.medewerkers-container tbody tr:hover td {
+  background: #fdf2f1;
+}
+
+/* Avatar */
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Badges */
+.medewerkers-container .badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-weight: 600;
+}
+
+.badge-artistiek { background: #fdecea; color: #c43b2f;  border: 1px solid #f5c6c2; }
+.badge-techniek  { background: #e8f0fe; color: #1a73e8;  border: 1px solid #b8d0f8; }
+.badge-productie { background: #e6f4ea; color: #2e7d32;  border: 1px solid #b7dfbc; }
+.badge-kostuums  { background: #fff3e0; color: #e65100;  border: 1px solid #ffcc80; }
+.badge-marketing { background: #f3e5f5; color: #7b1fa2;  border: 1px solid #ce93d8; }
+
+/* Empty state */
+.medewerkers-container .empty-state {
+  padding: 3.5rem;
+  text-align: center;
+  color: #888;
+}
+
+.medewerkers-container .empty-state i {
+  font-size: 36px;
+  margin-bottom: 14px;
+  display: block;
+  color: #ccc;
+}
+
+.medewerkers-container .empty-state p {
+  font-size: 14px;
+}

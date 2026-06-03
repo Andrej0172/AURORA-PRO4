@@ -1,31 +1,7 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg-primary: #0f0f11;
-  --bg-secondary: #1a1a1f;
-  --bg-card: #1f1f26;
-  --border: rgba(255,255,255,0.08);
-  --border-hover: rgba(255,255,255,0.16);
-  --text-primary: #f0eff4;
-  --text-secondary: #8e8d99;
-  --text-muted: #55545e;
-  --accent: #7f77dd;
-  --accent-light: #aea9ec;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-}
-
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
-  padding: 2rem;
-}
-
-.container {
+.voorstellingen-container {
   max-width: 900px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
 /* Topbar */
@@ -40,8 +16,8 @@ body {
 
 .topbar h1 {
   font-size: 20px;
-  font-weight: 500;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: #111;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -49,23 +25,23 @@ body {
 
 .topbar h1 i {
   font-size: 20px;
-  color: var(--accent-light);
+  color: #c43b2f;
 }
 
 .search-bar {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--bg-card);
-  border: 0.5px solid var(--border-hover);
-  border-radius: var(--radius-md);
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   padding: 7px 14px;
   width: 280px;
 }
 
 .search-bar i {
   font-size: 15px;
-  color: var(--text-muted);
+  color: #aaa;
 }
 
 .search-bar input {
@@ -73,12 +49,12 @@ body {
   border: none;
   outline: none;
   font-size: 13px;
-  color: var(--text-primary);
+  color: #222;
   width: 100%;
 }
 
 .search-bar input::placeholder {
-  color: var(--text-muted);
+  color: #bbb;
 }
 
 /* Stat cards */
@@ -90,65 +66,65 @@ body {
 }
 
 .stat-card {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-md);
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
   padding: 14px 18px;
 }
 
 .stat-card .label {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: #888;
   margin-bottom: 6px;
 }
 
 .stat-card .value {
   font-size: 24px;
-  font-weight: 500;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: #111;
 }
 
 /* Tabel */
 .table-wrap {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
   overflow: hidden;
 }
 
-table {
+.voorstellingen-container table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 
-thead tr {
-  background: var(--bg-secondary);
+.voorstellingen-container thead tr {
+  background: #fafafa;
 }
 
-th {
+.voorstellingen-container th {
   padding: 11px 18px;
   text-align: left;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-muted);
-  border-bottom: 0.5px solid var(--border);
+  color: #999;
+  border-bottom: 1px solid #e8e8e8;
 }
 
-td {
+.voorstellingen-container td {
   padding: 13px 18px;
-  color: var(--text-primary);
-  border-bottom: 0.5px solid var(--border);
+  color: #222;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-tbody tr:last-child td {
+.voorstellingen-container tbody tr:last-child td {
   border-bottom: none;
 }
 
-tbody tr:hover td {
-  background: rgba(255,255,255,0.03);
+.voorstellingen-container tbody tr:hover td {
+  background: #fdf2f1;
 }
 
 /* Datum cel */
@@ -163,8 +139,8 @@ tbody tr:hover td {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--bg-secondary);
-  border: 0.5px solid var(--border-hover);
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
   border-radius: 6px;
   padding: 4px 8px;
   min-width: 36px;
@@ -173,47 +149,47 @@ tbody tr:hover td {
 
 .datum-dag {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: #111;
   line-height: 1;
 }
 
 .datum-maand {
   font-size: 10px;
-  color: var(--text-muted);
+  color: #999;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .datum-volledig {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: #666;
 }
 
 /* Badges */
-.badge {
+.voorstellingen-container .badge {
   display: inline-block;
   font-size: 11px;
   padding: 3px 9px;
   border-radius: 99px;
-  font-weight: 500;
-  border: 0.5px solid transparent;
+  font-weight: 600;
+  border: 1px solid transparent;
 }
 
 /* Empty state */
-.empty-state {
+.voorstellingen-container .empty-state {
   padding: 3.5rem;
   text-align: center;
-  color: var(--text-secondary);
+  color: #888;
 }
 
-.empty-state i {
+.voorstellingen-container .empty-state i {
   font-size: 36px;
   margin-bottom: 14px;
   display: block;
-  color: var(--text-muted);
+  color: #ccc;
 }
 
-.empty-state p {
+.voorstellingen-container .empty-state p {
   font-size: 14px;
 }

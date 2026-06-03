@@ -1,13 +1,13 @@
 const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 
 const locatieColors = [
-  { bg: '#0c1e35', txt: '#85b7eb', border: '#185fa5' },
-  { bg: '#1a1733', txt: '#afa9ec', border: '#534ab7' },
-  { bg: '#051f14', txt: '#5dcaa5', border: '#0f6e56' },
-  { bg: '#2a1c05', txt: '#ef9f27', border: '#854f0b' },
-  { bg: '#0f2209', txt: '#97c459', border: '#3b6d11' },
-  { bg: '#1e0b0c', txt: '#f09595', border: '#8c2020' },
-  { bg: '#1f0a12', txt: '#ed93b1', border: '#7a1f42' },
+  { bg: '#fdecea', txt: '#c43b2f', border: '#f5c6c2' },
+  { bg: '#e8f0fe', txt: '#1a73e8', border: '#b8d0f8' },
+  { bg: '#e6f4ea', txt: '#2e7d32', border: '#b7dfbc' },
+  { bg: '#fff3e0', txt: '#e65100', border: '#ffcc80' },
+  { bg: '#f3e5f5', txt: '#7b1fa2', border: '#ce93d8' },
+  { bg: '#fce4ec', txt: '#c2185b', border: '#f48fb1' },
+  { bg: '#e0f7fa', txt: '#00838f', border: '#80deea' },
 ];
 
 let voorstellingen = [];
@@ -78,8 +78,7 @@ function filterTable() {
   renderTable(gefilterd);
 }
 
-// Data ophalen via PHP
-fetch('get_voorstellingen.php')
+fetch(dataUrl)
   .then(res => {
     if (!res.ok) throw new Error('Networkfout: ' + res.status);
     return res.json();
@@ -97,6 +96,5 @@ fetch('get_voorstellingen.php')
     console.error('Fout bij ophalen voorstellingen:', err);
     const empty = document.getElementById('emptyState');
     empty.style.display = 'block';
-    empty.querySelector('p').textContent =
-      'Kon voorstellingen niet laden. Controleer of get_voorstellingen.php bereikbaar is.';
+    empty.querySelector('p').textContent = 'Kon voorstellingen niet laden.';
   });
