@@ -55,6 +55,11 @@
     color: #b42318;
 }
 
+.account-alert-succes {
+    background: #e6f9f0;
+    color: #1a7a4a;
+}
+
 .account-form .form-groep {
     margin-bottom: 16px;
 }
@@ -329,6 +334,41 @@
 
 .overzicht-badge-rol-lid           { background: #f5f5f5; color: #555; }
 .overzicht-badge-rol-medewerker    { background: #0f0f0f; color: #fff; }
+
+/* ===== Account toevoegen ===== */
+.toevoegen-rij {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0 20px;
+}
+
+.toevoegen-tussenvoegsel {
+    max-width: 160px;
+}
+
+.account-card h2 {
+    font-size: 1.1rem;
+    color: #444;
+    margin: 24px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.account-card h2:first-of-type {
+    margin-top: 0;
+}
+
+.toevoegen-verplicht {
+    color: #c43b2f;
+    font-weight: 700;
+}
+
+.toevoegen-acties {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+}
 
 .overzicht-geen {
     text-align: center;

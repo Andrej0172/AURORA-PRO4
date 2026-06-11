@@ -7,7 +7,15 @@
             <h1>Accountenoverzicht</h1>
             <p>Alle geregistreerde accounts in het systeem.</p>
         </div>
+        <div class="account-hero-actions">
+            <a href="<?= URLROOT; ?>AccountsController/toevoegen" class="btn btn-primary">+ Nieuw account</a>
+        </div>
     </div>
+
+    <?php if (!empty($_SESSION['overzicht_melding'])) : ?>
+        <div class="account-alert account-alert-succes"><?= htmlspecialchars($_SESSION['overzicht_melding']); ?></div>
+        <?php unset($_SESSION['overzicht_melding']); ?>
+    <?php endif; ?>
 
     <?php if ($data['accounts'] === null) : ?>
         <div class="account-alert account-alert-error">

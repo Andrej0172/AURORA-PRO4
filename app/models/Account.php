@@ -747,6 +747,38 @@ class Account
 		}
 	}
 
+	public function createAccountByMedewerker($data)
+	{
+		if ($this->pdo === null) {
+			return false;
+		}
+
+		$toegestaneRollen = ['lid', 'medewerker'];
+		if (!in_array($data['rol'], $toegestaneRollen, true)) {
+			return false;
+		}
+
+		try {
+			$sql = 'INSERT INTO Accounts (Voornaam, Tussenvoegsel, Achternaam, Email, Telefoon, Geboortedatum, LidmaatschapId, StartDatum, Status, Rol, Wachtwoord)
+					VALUES (:voornaam, :tussenvoegsel, :achternaam, :email, :telefoon, :geboortedatum, :lidmaatschapId, CURDATE(), \'Actief\', :rol, :wachtwoord)';
+
+			$statement = $this->pdo->prepare($sql);
+			$statement->bindValue(':voornaam',      $data['voornaam'],                   PDO::PARAM_STR);
+			$statement->bindValue(':tussenvoegsel', $data['tussenvoegsel'] ?: null,      PDO::PARAM_STR);
+			$statement->bindValue(':achternaam',    $data['achternaam'],                 PDO::PARAM_STR);
+			$statement->bindValue(':email',         $data['email'],                      PDO::PARAM_STR);
+			$statement->bindValue(':telefoon',      $data['telefoon'] ?: null,           PDO::PARAM_STR);
+			$statement->bindValue(':geboortedatum', $data['geboortedatum'],              PDO::PARAM_STR);
+			$statement->bindValue(':lidmaatschapId',(int)$data['lidmaatschap_id'],       PDO::PARAM_INT);
+			$statement->bindValue(':rol',           $data['rol'],                        PDO::PARAM_STR);
+			$statement->bindValue(':wachtwoord',    password_hash($data['wachtwoord'], PASSWORD_DEFAULT), PDO::PARAM_STR);
+			$statement->execute();
+			return true;
+		} catch (PDOException $e) {
+			return false;
+		}
+	}
+
 	public function getMedewerkers()
 	{
 		if ($this->pdo === null) {

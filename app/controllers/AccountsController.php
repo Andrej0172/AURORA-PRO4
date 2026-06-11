@@ -500,6 +500,94 @@ class AccountsController extends BaseController
         ]);
     }
 
+    // Nieuw account aanmaken (alleen medewerkers)
+    public function toevoegen()
+    {
+        if (!isset($_SESSION['account_id'])) {
+            header('Location: ' . URLROOT . 'AccountsController/login');
+            exit;
+        }
+
+        if ($_SESSION['rol'] !== 'medewerker') {
+            header('Location: ' . URLROOT . 'AccountsController/index');
+            exit;
+        }
+
+        $lidmaatschappen = $this->accountModel->getAllLidmaatschappen();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $voornaam       = trim(isset($_POST['voornaam']) ? $_POST['voornaam'] : '');
+            $tussenvoegsel  = trim(isset($_POST['tussenvoegsel']) ? $_POST['tussenvoegsel'] : '');
+            $achternaam     = trim(isset($_POST['achternaam']) ? $_POST['achternaam'] : '');
+            $email          = trim(isset($_POST['email']) ? $_POST['email'] : '');
+            $telefoon       = trim(isset($_POST['telefoon']) ? $_POST['telefoon'] : '');
+            $geboortedatum  = trim(isset($_POST['geboortedatum']) ? $_POST['geboortedatum'] : '');
+            $lidmaatschapId = isset($_POST['lidmaatschap_id']) ? (int)$_POST['lidmaatschap_id'] : 0;
+            $rol            = isset($_POST['rol']) ? $_POST['rol'] : 'lid';
+            $wachtwoord     = isset($_POST['wachtwoord']) ? $_POST['wachtwoord'] : '';
+            $bevestig       = isset($_POST['bevestig_wachtwoord']) ? $_POST['bevestig_wachtwoord'] : '';
+
+            $fout = '';
+
+            if ($voornaam === '' || $achternaam === '' || $email === '' || $geboortedatum === '' || $lidmaatschapId === 0 || $wachtwoord === '') {
+                $fout = 'Vul alle verplichte velden in.';
+            } elseif (!in_array($rol, ['lid', 'medewerker'], true)) {
+                $fout = 'Ongeldige rol geselecteerd.';
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $fout = 'Voer een geldig e-mailadres in.';
+            } elseif ($wachtwoord !== $bevestig) {
+                $fout = 'De wachtwoorden komen niet overeen.';
+            } elseif (strlen($wachtwoord) < 6) {
+                $fout = 'Het wachtwoord moet minimaal 6 tekens bevatten.';
+            } elseif ($this->accountModel->emailExists($email)) {
+                $fout = 'Dit e-mailadres is al in gebruik.';
+            }
+
+            if ($fout === '') {
+                $succes = $this->accountModel->createAccountByMedewerker([
+                    'voornaam'        => $voornaam,
+                    'tussenvoegsel'   => $tussenvoegsel,
+                    'achternaam'      => $achternaam,
+                    'email'           => $email,
+                    'telefoon'        => $telefoon,
+                    'geboortedatum'   => $geboortedatum,
+                    'lidmaatschap_id' => $lidmaatschapId,
+                    'rol'             => $rol,
+                    'wachtwoord'      => $wachtwoord
+                ]);
+
+                if ($succes) {
+                    $_SESSION['overzicht_melding'] = 'Account voor ' . htmlspecialchars($voornaam . ' ' . $achternaam) . ' aangemaakt.';
+                    header('Location: ' . URLROOT . 'AccountsController/overzicht');
+                    exit;
+                }
+
+                $fout = 'Er is iets misgegaan. Probeer het opnieuw.';
+            }
+
+            $this->view('accounts/toevoegen', [
+                'title'          => 'Account toevoegen - Aurora Theater',
+                'documentTitle'  => 'Aurora Theater - Account toevoegen',
+                'activePage'     => 'overzicht',
+                'styles'         => ['accounts.css'],
+                'foutmelding'    => $fout,
+                'lidmaatschappen' => $lidmaatschappen,
+                'invoer'         => compact('voornaam', 'tussenvoegsel', 'achternaam', 'email', 'telefoon', 'geboortedatum', 'lidmaatschapId', 'rol')
+            ]);
+            return;
+        }
+
+        $this->view('accounts/toevoegen', [
+            'title'          => 'Account toevoegen - Aurora Theater',
+            'documentTitle'  => 'Aurora Theater - Account toevoegen',
+            'activePage'     => 'overzicht',
+            'styles'         => ['accounts.css'],
+            'foutmelding'    => '',
+            'lidmaatschappen' => $lidmaatschappen,
+            'invoer'         => []
+        ]);
+    }
+
     // Uitloggen en sessie opruimen
     public function logout()
     {
