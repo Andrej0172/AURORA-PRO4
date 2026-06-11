@@ -59,6 +59,7 @@ $dropdownNaam = trim(implode(' ', array_filter([$voornaam, $tussenvoegsel, $acht
                 <li><a href="<?= URLROOT ?>VoorstellingenController/index" <?= $activePage === 'voorstellingen' ? 'class="active"' : '' ?>>Voorstellingen</a></li>
                 <?php if ($rol === 'medewerker') : ?>
                     <li><a href="<?= URLROOT ?>MedewerkersController/index" <?= $activePage === 'medewerkers' ? 'class="active"' : '' ?>>Medewerkers</a></li>
+                    <li><a href="<?= URLROOT ?>AccountsController/overzicht" <?= $activePage === 'overzicht' ? 'class="active"' : '' ?>>Accounts</a></li>
                 <?php endif; ?>
                 <?php if ($isIngelogd) : ?>
                     <li><a href="#" class="nav-knop">Dashboard</a></li>

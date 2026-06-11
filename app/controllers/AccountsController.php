@@ -489,7 +489,7 @@ class AccountsController extends BaseController
         $this->view('accounts/overzicht', [
             'title'         => 'Accountenoverzicht - Aurora Theater',
             'documentTitle' => 'Aurora Theater - Accountenoverzicht',
-            'activePage'    => '',
+            'activePage'    => 'overzicht',
             'styles'        => ['accounts.css'],
             'headerAccount' => [
                 'voornaam'   => $_SESSION['voornaam'],
