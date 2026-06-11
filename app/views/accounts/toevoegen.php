@@ -1,7 +1,10 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
 <?php
+// Eerder ingevulde waarden ophalen zodat het formulier bij een fout niet leeg is.
 $invoer = isset($data['invoer']) ? $data['invoer'] : [];
+
+// Hulpfunctie: geeft de eerder ingevulde waarde terug, of een standaard als het veld leeg was.
 function oud($invoer, $veld, $standaard = '') {
     return htmlspecialchars(isset($invoer[$veld]) ? $invoer[$veld] : $standaard);
 }
@@ -20,10 +23,12 @@ function oud($invoer, $veld, $standaard = '') {
     </div>
 
     <section class="account-card">
+        <?php // Foutmelding tonen bij validatiefouten of een duplicate in de database. ?>
         <?php if (!empty($data['foutmelding'])) : ?>
             <div class="account-alert account-alert-error"><?= htmlspecialchars($data['foutmelding']); ?></div>
         <?php endif; ?>
 
+        <?php // novalidate zodat de browser-validatie wordt uitgeschakeld en onze eigen foutmeldingen getoond worden. ?>
         <form action="<?= URLROOT; ?>AccountsController/toevoegen" method="POST" class="account-form" novalidate>
 
             <h2>Persoonlijke gegevens</h2>
@@ -46,10 +51,12 @@ function oud($invoer, $veld, $standaard = '') {
             <div class="toevoegen-rij">
                 <div class="form-groep">
                     <label for="email">E-mailadres <span class="toevoegen-verplicht">*</span></label>
+                    <?php // type="text" zodat de browser geen eigen popup toont; validatie gebeurt server-side. ?>
                     <input type="text" id="email" name="email" value="<?= oud($invoer, 'email'); ?>" placeholder="naam@voorbeeld.nl">
                 </div>
                 <div class="form-groep">
                     <label for="telefoon">Telefoonnummer <span class="toevoegen-verplicht">*</span></label>
+                    <?php // Formaat: 06 gevolgd door 8 cijfers; validatie in de controller met regex. ?>
                     <input type="text" id="telefoon" name="telefoon" value="<?= oud($invoer, 'telefoon'); ?>" placeholder="0612345678">
                 </div>
             </div>
@@ -66,6 +73,7 @@ function oud($invoer, $veld, $standaard = '') {
             <div class="toevoegen-rij">
                 <div class="form-groep">
                     <label for="rol">Rol <span class="toevoegen-verplicht">*</span></label>
+                    <?php // Standaard 'lid'; de geselecteerde waarde blijft bewaard bij een fout. ?>
                     <select id="rol" name="rol">
                         <option value="lid"        <?= oud($invoer, 'rol', 'lid') === 'lid'        ? 'selected' : ''; ?>>Lid</option>
                         <option value="medewerker" <?= oud($invoer, 'rol', 'lid') === 'medewerker' ? 'selected' : ''; ?>>Medewerker</option>
@@ -111,10 +119,12 @@ function oud($invoer, $veld, $standaard = '') {
 </div>
 
 <script>
+// Wisselt het wachtwoordveld tussen verborgen en zichtbaar tekst.
 function toggleWachtwoord(veldId, knop) {
     var veld = document.getElementById(veldId);
     if (!veld) return;
     veld.type = veld.type === 'password' ? 'text' : 'password';
+    // Knopkleur geeft visueel aan of het wachtwoord zichtbaar is.
     knop.style.color = veld.type === 'text' ? '#c43b2f' : '';
 }
 </script>

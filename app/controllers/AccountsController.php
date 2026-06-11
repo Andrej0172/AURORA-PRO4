@@ -503,17 +503,20 @@ class AccountsController extends BaseController
     // Nieuw account aanmaken (alleen medewerkers)
     public function toevoegen()
     {
+        // Niet-ingelogde gebruikers sturen we naar de loginpagina.
         if (!isset($_SESSION['account_id'])) {
             header('Location: ' . URLROOT . 'AccountsController/login');
             exit;
         }
 
+        // Alleen medewerkers mogen accounts aanmaken; gewone leden worden teruggestuurd.
         if ($_SESSION['rol'] !== 'medewerker') {
             header('Location: ' . URLROOT . 'AccountsController/index');
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Invoer ophalen en witruimte verwijderen om lege-string-checks betrouwbaar te houden.
             $voornaam      = trim(isset($_POST['voornaam']) ? $_POST['voornaam'] : '');
             $tussenvoegsel = trim(isset($_POST['tussenvoegsel']) ? $_POST['tussenvoegsel'] : '');
             $achternaam    = trim(isset($_POST['achternaam']) ? $_POST['achternaam'] : '');
@@ -526,11 +529,14 @@ class AccountsController extends BaseController
 
             $fout = '';
 
+            // Validatie in vaste volgorde zodat de medewerker één duidelijke melding tegelijk ziet.
             if ($voornaam === '' || $achternaam === '' || $email === '' || $telefoon === '' || $geboortedatum === '' || $wachtwoord === '') {
                 $fout = 'Vul alle verplichte velden in.';
             } elseif (!preg_match('/^06\d{8}$/', $telefoon)) {
+                // Nederlands mobiel nummer: begint met 06, gevolgd door precies 8 cijfers.
                 $fout = 'Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers (bijv. 0612345678).';
             } elseif (!in_array($rol, ['lid', 'medewerker'], true)) {
+                // Whitelist-check zodat er geen ongeldige waarde in de database terechtkomt.
                 $fout = 'Ongeldige rol geselecteerd.';
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $fout = 'Voer een geldig e-mailadres in.';
@@ -541,6 +547,8 @@ class AccountsController extends BaseController
             }
 
             if ($fout === '') {
+                // Duplicaatdetectie gebeurt via de UNIQUE constraints in de database (zie model).
+                // lidmaatschap_id 1 = Basis; medewerkers hebben geen keuze nodig.
                 $resultaat = $this->accountModel->createAccountByMedewerker([
                     'voornaam'        => $voornaam,
                     'tussenvoegsel'   => $tussenvoegsel,
@@ -554,11 +562,13 @@ class AccountsController extends BaseController
                 ]);
 
                 if ($resultaat === true) {
+                    // Succesmelding via sessie zodat die na de redirect eenmalig getoond wordt.
                     $_SESSION['overzicht_melding'] = 'Account voor ' . htmlspecialchars($voornaam . ' ' . $achternaam) . ' aangemaakt.';
                     header('Location: ' . URLROOT . 'AccountsController/overzicht');
                     exit;
                 }
 
+                // Het model geeft een string terug bij een UNIQUE-conflict, anders false bij een andere fout.
                 if ($resultaat === 'duplicate_email') {
                     $fout = 'Er bestaat al een account met dit e-mailadres.';
                 } elseif ($resultaat === 'duplicate_telefoon') {
@@ -568,6 +578,7 @@ class AccountsController extends BaseController
                 }
             }
 
+            // Formulier opnieuw tonen met foutmelding en eerder ingevulde waarden.
             $this->view('accounts/toevoegen', [
                 'title'         => 'Account toevoegen - Aurora Theater',
                 'documentTitle' => 'Aurora Theater - Account toevoegen',
@@ -579,6 +590,7 @@ class AccountsController extends BaseController
             return;
         }
 
+        // GET-verzoek: leeg formulier tonen.
         $this->view('accounts/toevoegen', [
             'title'         => 'Account toevoegen - Aurora Theater',
             'documentTitle' => 'Aurora Theater - Account toevoegen',
