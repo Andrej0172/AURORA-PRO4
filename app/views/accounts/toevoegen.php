@@ -61,7 +61,7 @@ function oud($invoer, $veld, $standaard = '') {
                 </div>
             </div>
 
-            <h2>Account instellingen</h2>
+            <h2>Rol</h2>
 
             <div class="toevoegen-rij">
                 <div class="form-groep">
@@ -69,17 +69,6 @@ function oud($invoer, $veld, $standaard = '') {
                     <select id="rol" name="rol">
                         <option value="lid"        <?= oud($invoer, 'rol', 'lid') === 'lid'        ? 'selected' : ''; ?>>Lid</option>
                         <option value="medewerker" <?= oud($invoer, 'rol', 'lid') === 'medewerker' ? 'selected' : ''; ?>>Medewerker</option>
-                    </select>
-                </div>
-                <div class="form-groep">
-                    <label for="lidmaatschap_id">Lidmaatschap <span class="toevoegen-verplicht">*</span></label>
-                    <select id="lidmaatschap_id" name="lidmaatschap_id">
-                        <option value="">— Kies lidmaatschap —</option>
-                        <?php foreach ($data['lidmaatschappen'] as $l) : ?>
-                            <option value="<?= (int)$l->id; ?>" <?= (int)oud($invoer, 'lidmaatschapId') === (int)$l->id ? 'selected' : ''; ?>>
-                                <?= htmlspecialchars($l->naam); ?>
-                            </option>
-                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>

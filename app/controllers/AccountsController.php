@@ -513,23 +513,20 @@ class AccountsController extends BaseController
             exit;
         }
 
-        $lidmaatschappen = $this->accountModel->getAllLidmaatschappen();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $voornaam       = trim(isset($_POST['voornaam']) ? $_POST['voornaam'] : '');
-            $tussenvoegsel  = trim(isset($_POST['tussenvoegsel']) ? $_POST['tussenvoegsel'] : '');
-            $achternaam     = trim(isset($_POST['achternaam']) ? $_POST['achternaam'] : '');
-            $email          = trim(isset($_POST['email']) ? $_POST['email'] : '');
-            $telefoon       = trim(isset($_POST['telefoon']) ? $_POST['telefoon'] : '');
-            $geboortedatum  = trim(isset($_POST['geboortedatum']) ? $_POST['geboortedatum'] : '');
-            $lidmaatschapId = isset($_POST['lidmaatschap_id']) ? (int)$_POST['lidmaatschap_id'] : 0;
-            $rol            = isset($_POST['rol']) ? $_POST['rol'] : 'lid';
-            $wachtwoord     = isset($_POST['wachtwoord']) ? $_POST['wachtwoord'] : '';
-            $bevestig       = isset($_POST['bevestig_wachtwoord']) ? $_POST['bevestig_wachtwoord'] : '';
+            $voornaam      = trim(isset($_POST['voornaam']) ? $_POST['voornaam'] : '');
+            $tussenvoegsel = trim(isset($_POST['tussenvoegsel']) ? $_POST['tussenvoegsel'] : '');
+            $achternaam    = trim(isset($_POST['achternaam']) ? $_POST['achternaam'] : '');
+            $email         = trim(isset($_POST['email']) ? $_POST['email'] : '');
+            $telefoon      = trim(isset($_POST['telefoon']) ? $_POST['telefoon'] : '');
+            $geboortedatum = trim(isset($_POST['geboortedatum']) ? $_POST['geboortedatum'] : '');
+            $rol           = isset($_POST['rol']) ? $_POST['rol'] : 'lid';
+            $wachtwoord    = isset($_POST['wachtwoord']) ? $_POST['wachtwoord'] : '';
+            $bevestig      = isset($_POST['bevestig_wachtwoord']) ? $_POST['bevestig_wachtwoord'] : '';
 
             $fout = '';
 
-            if ($voornaam === '' || $achternaam === '' || $email === '' || $geboortedatum === '' || $lidmaatschapId === 0 || $wachtwoord === '') {
+            if ($voornaam === '' || $achternaam === '' || $email === '' || $geboortedatum === '' || $wachtwoord === '') {
                 $fout = 'Vul alle verplichte velden in.';
             } elseif (!in_array($rol, ['lid', 'medewerker'], true)) {
                 $fout = 'Ongeldige rol geselecteerd.';
@@ -551,7 +548,7 @@ class AccountsController extends BaseController
                     'email'           => $email,
                     'telefoon'        => $telefoon,
                     'geboortedatum'   => $geboortedatum,
-                    'lidmaatschap_id' => $lidmaatschapId,
+                    'lidmaatschap_id' => 1,
                     'rol'             => $rol,
                     'wachtwoord'      => $wachtwoord
                 ]);
@@ -566,25 +563,23 @@ class AccountsController extends BaseController
             }
 
             $this->view('accounts/toevoegen', [
-                'title'          => 'Account toevoegen - Aurora Theater',
-                'documentTitle'  => 'Aurora Theater - Account toevoegen',
-                'activePage'     => 'overzicht',
-                'styles'         => ['accounts.css'],
-                'foutmelding'    => $fout,
-                'lidmaatschappen' => $lidmaatschappen,
-                'invoer'         => compact('voornaam', 'tussenvoegsel', 'achternaam', 'email', 'telefoon', 'geboortedatum', 'lidmaatschapId', 'rol')
+                'title'         => 'Account toevoegen - Aurora Theater',
+                'documentTitle' => 'Aurora Theater - Account toevoegen',
+                'activePage'    => 'overzicht',
+                'styles'        => ['accounts.css'],
+                'foutmelding'   => $fout,
+                'invoer'        => compact('voornaam', 'tussenvoegsel', 'achternaam', 'email', 'telefoon', 'geboortedatum', 'rol')
             ]);
             return;
         }
 
         $this->view('accounts/toevoegen', [
-            'title'          => 'Account toevoegen - Aurora Theater',
-            'documentTitle'  => 'Aurora Theater - Account toevoegen',
-            'activePage'     => 'overzicht',
-            'styles'         => ['accounts.css'],
-            'foutmelding'    => '',
-            'lidmaatschappen' => $lidmaatschappen,
-            'invoer'         => []
+            'title'         => 'Account toevoegen - Aurora Theater',
+            'documentTitle' => 'Aurora Theater - Account toevoegen',
+            'activePage'    => 'overzicht',
+            'styles'        => ['accounts.css'],
+            'foutmelding'   => '',
+            'invoer'        => []
         ]);
     }
 
