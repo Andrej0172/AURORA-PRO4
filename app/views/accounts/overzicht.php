@@ -79,7 +79,6 @@
                             <th>Naam</th>
                             <th>E-mail</th>
                             <th>Telefoon</th>
-                            <th>Startdatum</th>
                             <th>Rol</th>
                             <th>Status</th>
                         </tr>
@@ -91,18 +90,11 @@
                             $naam      = htmlspecialchars(implode(' ', $naamDelen));
                             $rol       = strtolower($account->rol);
                             $status    = strtolower($account->status);
-
-                            $startDatum = '';
-                            if (!empty($account->start_datum)) {
-                                $dt = DateTime::createFromFormat('Y-m-d', $account->start_datum);
-                                if ($dt) $startDatum = $dt->format('d-m-Y');
-                            }
                             ?>
                             <tr data-rol="<?= htmlspecialchars($rol); ?>" data-zoek="<?= strtolower($naam . ' ' . $account->email); ?>">
                                 <td><?= $naam; ?></td>
                                 <td><?= htmlspecialchars($account->email); ?></td>
                                 <td><?= htmlspecialchars($account->telefoon ?? '—'); ?></td>
-                                <td><?= htmlspecialchars($startDatum ?: '—'); ?></td>
                                 <td>
                                     <span class="overzicht-badge overzicht-badge-rol-<?= htmlspecialchars($rol); ?>">
                                         <?= htmlspecialchars(ucfirst($account->rol)); ?>

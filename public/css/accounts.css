@@ -284,6 +284,7 @@
 
 .overzicht-tabel-wrapper {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .overzicht-tabel {
@@ -403,6 +404,56 @@
 
     .overzicht-zoek {
         width: 100%;
+    }
+
+    /* Tabel omzetten naar cards op smalle schermen */
+    .overzicht-tabel thead {
+        display: none;
+    }
+
+    .overzicht-tabel tbody tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px 16px;
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .overzicht-tabel tbody tr:hover {
+        background: none;
+    }
+
+    .overzicht-tabel tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .overzicht-tabel td {
+        padding: 2px 0;
+        border-bottom: none;
+        white-space: normal;
+    }
+
+    /* Data-label als prefix via CSS */
+    .overzicht-tabel td::before {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #aaa;
+        margin-bottom: 2px;
+    }
+
+    .overzicht-tabel td:nth-child(1)::before { content: "Naam"; }
+    .overzicht-tabel td:nth-child(2)::before { content: "E-mail"; }
+    .overzicht-tabel td:nth-child(3)::before { content: "Telefoon"; }
+    .overzicht-tabel td:nth-child(4)::before { content: "Rol"; }
+    .overzicht-tabel td:nth-child(5)::before { content: "Status"; }
+
+    /* Naam en e-mail over volle breedte */
+    .overzicht-tabel td:nth-child(1),
+    .overzicht-tabel td:nth-child(2) {
+        grid-column: 1 / -1;
     }
 }
 
