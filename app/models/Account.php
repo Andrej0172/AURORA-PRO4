@@ -747,35 +747,44 @@ class Account
 		}
 	}
 
+	// Maakt een nieuw account aan namens een medewerker.
+	// Geeft true terug bij succes, een string bij een UNIQUE-conflict, of false bij een andere databasefout.
 	public function createAccountByMedewerker($data)
 	{
 		if ($this->pdo === null) {
 			return false;
 		}
 
+		// Rol mag alleen 'lid' of 'medewerker' zijn; andere waarden weigeren we vóór de query.
 		$toegestaneRollen = ['lid', 'medewerker'];
 		if (!in_array($data['rol'], $toegestaneRollen, true)) {
 			return false;
 		}
 
 		try {
+			// Nieuw account wordt direct op Actief gezet met de huidige datum als startdatum.
 			$sql = 'INSERT INTO Accounts (Voornaam, Tussenvoegsel, Achternaam, Email, Telefoon, Geboortedatum, LidmaatschapId, StartDatum, Status, Rol, Wachtwoord)
 					VALUES (:voornaam, :tussenvoegsel, :achternaam, :email, :telefoon, :geboortedatum, :lidmaatschapId, CURDATE(), \'Actief\', :rol, :wachtwoord)';
 
 			$statement = $this->pdo->prepare($sql);
 			$statement->bindValue(':voornaam',      $data['voornaam'],                   PDO::PARAM_STR);
+			// Leeg tussenvoegsel opslaan als NULL zodat de kolom consistent blijft.
 			$statement->bindValue(':tussenvoegsel', $data['tussenvoegsel'] ?: null,      PDO::PARAM_STR);
 			$statement->bindValue(':achternaam',    $data['achternaam'],                 PDO::PARAM_STR);
 			$statement->bindValue(':email',         $data['email'],                      PDO::PARAM_STR);
+			// Leeg telefoonnummer opslaan als NULL (UNIQUE-kolom mag meerdere NULL-waarden bevatten).
 			$statement->bindValue(':telefoon',      $data['telefoon'] ?: null,           PDO::PARAM_STR);
 			$statement->bindValue(':geboortedatum', $data['geboortedatum'],              PDO::PARAM_STR);
 			$statement->bindValue(':lidmaatschapId',(int)$data['lidmaatschap_id'],       PDO::PARAM_INT);
 			$statement->bindValue(':rol',           $data['rol'],                        PDO::PARAM_STR);
+			// Wachtwoord wordt gehasht met bcrypt; nooit plaintext opslaan.
 			$statement->bindValue(':wachtwoord',    password_hash($data['wachtwoord'], PASSWORD_DEFAULT), PDO::PARAM_STR);
 			$statement->execute();
 			return true;
 		} catch (PDOException $e) {
-			// Errorcode 1062 = UNIQUE constraint violation; geef terug welk veld al bestaat.
+			// Errorcode 1062 = UNIQUE constraint violation.
+			// We lezen de foutmelding uit om te bepalen welk veld al in gebruik is,
+			// zodat de controller een specifieke melding kan tonen aan de medewerker.
 			if ((int)$e->errorInfo[1] === 1062) {
 				$bericht = $e->errorInfo[2];
 				if (str_contains($bericht, 'Email') || str_contains($bericht, 'UQ_Accounts_Email')) {

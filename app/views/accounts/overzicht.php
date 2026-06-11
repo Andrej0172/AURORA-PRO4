@@ -12,11 +12,13 @@
         </div>
     </div>
 
+    <?php // Succesmelding tonen na het aanmaken van een account; daarna direct verwijderen uit de sessie. ?>
     <?php if (!empty($_SESSION['overzicht_melding'])) : ?>
         <div class="account-alert account-alert-succes"><?= htmlspecialchars($_SESSION['overzicht_melding']); ?></div>
         <?php unset($_SESSION['overzicht_melding']); ?>
     <?php endif; ?>
 
+    <?php // null = databasefout; lege array = geen accounts; anders tabel tonen. ?>
     <?php if ($data['accounts'] === null) : ?>
         <div class="account-alert account-alert-error">
             Accounts konden niet worden geladen. Probeer het opnieuw.
@@ -25,10 +27,10 @@
         <p class="account-text">Er zijn nog geen accounts gevonden.</p>
     <?php else : ?>
         <?php
-        // Statistieken berekenen uit de opgehaalde data.
-        $totaal      = count($data['accounts']);
-        $aantalLeden = 0;
-        $aantalMedew = 0;
+        // Statistieken berekenen uit de opgehaalde data; zo hoeven we geen extra queries te doen.
+        $totaal       = count($data['accounts']);
+        $aantalLeden  = 0;
+        $aantalMedew  = 0;
         $aantalActief = 0;
         foreach ($data['accounts'] as $a) {
             if (strtolower($a->rol) === 'medewerker') $aantalMedew++;
@@ -57,6 +59,7 @@
         </div>
 
         <section class="account-card">
+            <?php // Filterknopen en zoekbalk; filtering gebeurt client-side via JavaScript. ?>
             <div class="overzicht-toolbar">
                 <div class="overzicht-filters">
                     <button class="overzicht-filter-knop actief" data-filter="alle">Alle</button>
@@ -86,11 +89,14 @@
                     <tbody>
                         <?php foreach ($data['accounts'] as $account) : ?>
                             <?php
+                            // Naam samenvoegen zonder extra spaties bij een leeg tussenvoegsel.
                             $naamDelen = array_filter([$account->voornaam, $account->tussenvoegsel, $account->achternaam]);
                             $naam      = htmlspecialchars(implode(' ', $naamDelen));
+                            // Kleine letters voor data-attributen zodat de JS-filter hoofdletterongevoelig werkt.
                             $rol       = strtolower($account->rol);
                             $status    = strtolower($account->status);
                             ?>
+                            <?php // data-rol en data-zoek worden door de JavaScript-filter gebruikt. ?>
                             <tr data-rol="<?= htmlspecialchars($rol); ?>" data-zoek="<?= strtolower($naam . ' ' . $account->email); ?>">
                                 <td><?= $naam; ?></td>
                                 <td><?= htmlspecialchars($account->email); ?></td>
@@ -111,6 +117,7 @@
                 </table>
             </div>
 
+            <?php // Lege toestand: zichtbaar als zoeken of filteren geen resultaten oplevert. ?>
             <p class="overzicht-geen" id="overzichtGeen" style="display:none;">Geen accounts gevonden voor deze zoekopdracht.</p>
         </section>
     <?php endif; ?>
@@ -118,27 +125,30 @@
 
 <script>
 (function () {
-    var zoek    = document.getElementById('overzichtZoek');
-    var rijen   = document.querySelectorAll('#overzichtTabel tbody tr');
-    var geen    = document.getElementById('overzichtGeen');
-    var knoppen = document.querySelectorAll('.overzicht-filter-knop');
+    var zoek         = document.getElementById('overzichtZoek');
+    var rijen        = document.querySelectorAll('#overzichtTabel tbody tr');
+    var geen         = document.getElementById('overzichtGeen');
+    var knoppen      = document.querySelectorAll('.overzicht-filter-knop');
     var huidigFilter = 'alle';
 
+    // Verbergt rijen die niet overeenkomen met het actieve filter én de zoekterm.
     function filterTabel() {
-        var zoekterm = zoek ? zoek.value.toLowerCase().trim() : '';
+        var zoekterm  = zoek ? zoek.value.toLowerCase().trim() : '';
         var zichtbaar = 0;
 
         rijen.forEach(function (rij) {
             var matchRol  = huidigFilter === 'alle' || rij.dataset.rol === huidigFilter;
             var matchZoek = zoekterm === '' || rij.dataset.zoek.indexOf(zoekterm) !== -1;
-            var tonen = matchRol && matchZoek;
+            var tonen     = matchRol && matchZoek;
             rij.style.display = tonen ? '' : 'none';
             if (tonen) zichtbaar++;
         });
 
+        // Lege-toestand tonen als er na filtering geen rijen zichtbaar zijn.
         if (geen) geen.style.display = zichtbaar === 0 ? '' : 'none';
     }
 
+    // Filterknop activeert het bijbehorende rolfilter en herberekent de tabel.
     knoppen.forEach(function (knop) {
         knop.addEventListener('click', function () {
             knoppen.forEach(function (k) { k.classList.remove('actief'); });
@@ -148,6 +158,7 @@
         });
     });
 
+    // Zoekbalk filtert live bij elke toetsaanslag.
     if (zoek) zoek.addEventListener('input', filterTabel);
 })();
 </script>
