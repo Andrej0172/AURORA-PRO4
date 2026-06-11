@@ -79,7 +79,6 @@
                             <th>Naam</th>
                             <th>E-mail</th>
                             <th>Telefoon</th>
-                            <th>Lidmaatschap</th>
                             <th>Startdatum</th>
                             <th>Rol</th>
                             <th>Status</th>
@@ -103,7 +102,6 @@
                                 <td><?= $naam; ?></td>
                                 <td><?= htmlspecialchars($account->email); ?></td>
                                 <td><?= htmlspecialchars($account->telefoon ?? '—'); ?></td>
-                                <td><?= htmlspecialchars($account->lidmaatschap ?? '—'); ?></td>
                                 <td><?= htmlspecialchars($startDatum ?: '—'); ?></td>
                                 <td>
                                     <span class="overzicht-badge overzicht-badge-rol-<?= htmlspecialchars($rol); ?>">
