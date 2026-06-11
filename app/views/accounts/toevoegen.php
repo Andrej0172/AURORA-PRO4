@@ -49,8 +49,8 @@ function oud($invoer, $veld, $standaard = '') {
                     <input type="text" id="email" name="email" value="<?= oud($invoer, 'email'); ?>" placeholder="naam@voorbeeld.nl">
                 </div>
                 <div class="form-groep">
-                    <label for="telefoon">Telefoonnummer</label>
-                    <input type="text" id="telefoon" name="telefoon" value="<?= oud($invoer, 'telefoon'); ?>" placeholder="06-12345678">
+                    <label for="telefoon">Telefoonnummer <span class="toevoegen-verplicht">*</span></label>
+                    <input type="text" id="telefoon" name="telefoon" value="<?= oud($invoer, 'telefoon'); ?>" placeholder="0612345678">
                 </div>
             </div>
 

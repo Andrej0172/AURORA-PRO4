@@ -526,8 +526,10 @@ class AccountsController extends BaseController
 
             $fout = '';
 
-            if ($voornaam === '' || $achternaam === '' || $email === '' || $geboortedatum === '' || $wachtwoord === '') {
+            if ($voornaam === '' || $achternaam === '' || $email === '' || $telefoon === '' || $geboortedatum === '' || $wachtwoord === '') {
                 $fout = 'Vul alle verplichte velden in.';
+            } elseif (!preg_match('/^06\d{8}$/', $telefoon)) {
+                $fout = 'Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers (bijv. 0612345678).';
             } elseif (!in_array($rol, ['lid', 'medewerker'], true)) {
                 $fout = 'Ongeldige rol geselecteerd.';
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
