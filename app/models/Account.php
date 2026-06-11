@@ -775,6 +775,17 @@ class Account
 			$statement->execute();
 			return true;
 		} catch (PDOException $e) {
+			// Errorcode 1062 = UNIQUE constraint violation; geef terug welk veld al bestaat.
+			if ((int)$e->errorInfo[1] === 1062) {
+				$bericht = $e->errorInfo[2];
+				if (str_contains($bericht, 'Email') || str_contains($bericht, 'UQ_Accounts_Email')) {
+					return 'duplicate_email';
+				}
+				if (str_contains($bericht, 'Telefoon') || str_contains($bericht, 'UQ_Accounts_Telefoon')) {
+					return 'duplicate_telefoon';
+				}
+				return 'duplicate';
+			}
 			return false;
 		}
 	}

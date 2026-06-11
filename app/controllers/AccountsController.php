@@ -538,12 +538,10 @@ class AccountsController extends BaseController
                 $fout = 'De wachtwoorden komen niet overeen.';
             } elseif (strlen($wachtwoord) < 6) {
                 $fout = 'Het wachtwoord moet minimaal 6 tekens bevatten.';
-            } elseif ($this->accountModel->emailExists($email)) {
-                $fout = 'Dit e-mailadres is al in gebruik.';
             }
 
             if ($fout === '') {
-                $succes = $this->accountModel->createAccountByMedewerker([
+                $resultaat = $this->accountModel->createAccountByMedewerker([
                     'voornaam'        => $voornaam,
                     'tussenvoegsel'   => $tussenvoegsel,
                     'achternaam'      => $achternaam,
@@ -555,13 +553,19 @@ class AccountsController extends BaseController
                     'wachtwoord'      => $wachtwoord
                 ]);
 
-                if ($succes) {
+                if ($resultaat === true) {
                     $_SESSION['overzicht_melding'] = 'Account voor ' . htmlspecialchars($voornaam . ' ' . $achternaam) . ' aangemaakt.';
                     header('Location: ' . URLROOT . 'AccountsController/overzicht');
                     exit;
                 }
 
-                $fout = 'Er is iets misgegaan. Probeer het opnieuw.';
+                if ($resultaat === 'duplicate_email') {
+                    $fout = 'Er bestaat al een account met dit e-mailadres.';
+                } elseif ($resultaat === 'duplicate_telefoon') {
+                    $fout = 'Er bestaat al een account met dit telefoonnummer.';
+                } else {
+                    $fout = 'Er is iets misgegaan. Probeer het opnieuw.';
+                }
             }
 
             $this->view('accounts/toevoegen', [
