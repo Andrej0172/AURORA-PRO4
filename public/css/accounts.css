@@ -190,6 +190,153 @@
     accent-color: #c43b2f;
 }
 
+/* ===== Accountenoverzicht (medewerkers) ===== */
+.overzicht-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.overzicht-stat {
+    background: #fff;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+
+.overzicht-stat-getal {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #c43b2f;
+    line-height: 1;
+}
+
+.overzicht-stat-label {
+    font-size: 0.82rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.overzicht-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.overzicht-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.overzicht-filter-knop {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.overzicht-filter-knop:hover {
+    background: #eee;
+    color: #222;
+}
+
+.overzicht-filter-knop.actief {
+    background: #c43b2f;
+    border-color: #c43b2f;
+    color: #fff;
+}
+
+.overzicht-zoek {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    width: 260px;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fafafa;
+}
+
+.overzicht-zoek:focus {
+    border-color: #c43b2f;
+    background: #fff;
+}
+
+.overzicht-tabel-wrapper {
+    overflow-x: auto;
+}
+
+.overzicht-tabel {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.overzicht-tabel th,
+.overzicht-tabel td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.overzicht-tabel th {
+    color: #888;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: #fafafa;
+}
+
+.overzicht-tabel tbody tr:hover {
+    background: #fff7f6;
+}
+
+.overzicht-tabel tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Statusbadges */
+.overzicht-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.overzicht-badge-status-actief     { background: #e6f9f0; color: #1a7a4a; }
+.overzicht-badge-status-verlopen   { background: #fff4e5; color: #b45309; }
+.overzicht-badge-status-gepauzeerd { background: #e8f0fe; color: #1a56db; }
+.overzicht-badge-status-opgezegd   { background: #fdecea; color: #b42318; }
+
+.overzicht-badge-rol-lid           { background: #f5f5f5; color: #555; }
+.overzicht-badge-rol-medewerker    { background: #0f0f0f; color: #fff; }
+
+.overzicht-geen {
+    text-align: center;
+    padding: 24px;
+    color: #888;
+    font-size: 0.95rem;
+}
+
 @media (max-width: 820px) {
     .account-grid,
     .account-hero {
@@ -203,6 +350,19 @@
 
     .account-card {
         padding: 22px;
+    }
+
+    .overzicht-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .overzicht-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .overzicht-zoek {
+        width: 100%;
     }
 }
 
@@ -218,6 +378,10 @@
 
     .account-hero h1 {
         font-size: 1.6rem;
+    }
+
+    .overzicht-stats {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

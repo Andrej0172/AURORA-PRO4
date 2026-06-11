@@ -89,6 +89,9 @@ $dropdownNaam = trim(implode(' ', array_filter([$voornaam, $tussenvoegsel, $acht
                     <span class="dropdown-naam"><?= htmlspecialchars($dropdownNaam); ?></span>
                     <a href="<?= $accountUrl; ?>">Profiel bekijken</a>
                     <a href="<?= URLROOT; ?>AccountsController/instellingen">Instellingen</a>
+                    <?php if ($rol === 'medewerker') : ?>
+                        <a href="<?= URLROOT; ?>AccountsController/overzicht">Accountenoverzicht</a>
+                    <?php endif; ?>
                     <hr>
                     <a href="<?= URLROOT; ?>AccountsController/logout" class="dropdown-uitloggen">Uitloggen</a>
                 <?php else : ?>
