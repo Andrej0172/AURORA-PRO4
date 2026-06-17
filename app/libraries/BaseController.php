@@ -11,10 +11,11 @@ class BaseController
 	// laad een view en geef de $data-array mee zodat de view die kan gebruiken
 	public function view($view, $data = [])
 	{
-		if (file_exists('../app/views/' . $view . '.php')) {
-			require_once('../app/views/' . $view . '.php');
+		$viewFile = APPROOT . '/views/' . $view . '.php';
+		if (file_exists($viewFile)) {
+			require_once($viewFile);
 		} else {
-			echo 'View bestaat niet';
+			echo 'View bestaat niet: ' . $view;
 		}
 	}
 }

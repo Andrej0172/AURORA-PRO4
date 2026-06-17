@@ -11,7 +11,7 @@ class Core
         $url = $this->getURL();
 
         // Controleer of de controller bestaat
-        if (file_exists('../app/controllers/' . ucwords($url[0]) . '.php')) {
+        if (file_exists(APPROOT . '/controllers/' . ucwords($url[0]) . '.php')) {
             $this->currentController = ucwords($url[0]);
             unset($url[0]);
         } else {
@@ -20,7 +20,7 @@ class Core
         }
 
         // Laad de controller
-        require_once '../app/controllers/' . $this->currentController . '.php';
+        require_once APPROOT . '/controllers/' . $this->currentController . '.php';
         $this->currentController = new $this->currentController();
 
         // Controleer of de methode bestaat
@@ -47,7 +47,7 @@ class Core
             'styles'        => ['errors.css']
         ];
 
-        require_once '../app/views/errors/notfound.php';
+        require_once APPROOT . '/views/errors/notfound.php';
     }
 
     public function getURL()
