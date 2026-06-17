@@ -68,6 +68,9 @@ fetch(dataUrl)
     return res.json();
   })
   .then(data => {
+    if (data.error) {
+      throw new Error(data.error);
+    }
     medewerkers = data;
     document.getElementById('totalCount').textContent = medewerkers.length;
 
@@ -80,5 +83,5 @@ fetch(dataUrl)
     console.error('Fout bij ophalen medewerkers:', err);
     const empty = document.getElementById('emptyState');
     empty.style.display = 'block';
-    empty.querySelector('p').textContent = 'Kon medewerkers niet laden.';
+    empty.querySelector('p').textContent = 'Medewerkers konden niet worden geladen. Probeer opnieuw.';
   });

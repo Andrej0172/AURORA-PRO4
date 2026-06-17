@@ -193,3 +193,110 @@
 .voorstellingen-container .empty-state p {
   font-size: 14px;
 }
+
+/* Topbar actions */
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-primary {
+  background: #c43b2f;
+  color: #fff;
+  border-color: #c43b2f;
+}
+
+.btn-primary:hover {
+  background: #a83228;
+  border-color: #a83228;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #555;
+  border-color: #ddd;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+/* Alerts */
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 1rem;
+}
+
+.alert-success {
+  background: #e6f4ea;
+  color: #2e7d32;
+  border: 1px solid #b7dfbc;
+}
+
+.alert-error {
+  background: #fdecea;
+  color: #c43b2f;
+  border: 1px solid #f5c6c2;
+}
+
+/* Form */
+.form-wrap {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #222;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #c43b2f;
+  box-shadow: 0 0 0 2px rgba(196, 59, 47, 0.15);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.5rem;
+}

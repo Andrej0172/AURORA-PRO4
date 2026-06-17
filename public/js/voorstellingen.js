@@ -32,6 +32,12 @@ function formatDatum(dateStr) {
   };
 }
 
+function formatTijd(tijdStr) {
+  if (!tijdStr) return '';
+  const parts = tijdStr.split(':');
+  return parts[0] + ':' + parts[1];
+}
+
 function renderTable(data) {
   const tbody = document.getElementById('tableBody');
   const empty = document.getElementById('emptyState');
@@ -46,7 +52,8 @@ function renderTable(data) {
   empty.style.display = 'none';
   tbody.innerHTML = data.map(v => {
     const d = formatDatum(v.datum);
-    const c = getLocatieColor(v.locatie);
+    const zaal = v.zaal || v.locatie || '';
+    const c = getLocatieColor(zaal);
     return `
       <tr>
         <td>${v.titel}</td>
@@ -59,9 +66,10 @@ function renderTable(data) {
             <span class="datum-volledig">${d.volledig}</span>
           </div>
         </td>
+        <td>${formatTijd(v.tijd)}</td>
         <td>
           <span class="badge" style="background:${c.bg}; color:${c.txt}; border-color:${c.border};">
-            ${v.locatie}
+            ${zaal}
           </span>
         </td>
       </tr>`;
@@ -73,7 +81,7 @@ function filterTable() {
   const gefilterd = voorstellingen.filter(v =>
     v.titel.toLowerCase().includes(q) ||
     v.datum.toLowerCase().includes(q) ||
-    v.locatie.toLowerCase().includes(q)
+    (v.zaal || v.locatie || '').toLowerCase().includes(q)
   );
   renderTable(gefilterd);
 }
@@ -84,10 +92,13 @@ fetch(dataUrl)
     return res.json();
   })
   .then(data => {
+    if (data.error) {
+      throw new Error(data.error);
+    }
     voorstellingen = data;
     document.getElementById('totalCount').textContent = voorstellingen.length;
 
-    const locaties = [...new Set(voorstellingen.map(v => v.locatie))];
+    const locaties = [...new Set(voorstellingen.map(v => v.zaal || v.locatie))];
     document.getElementById('locatieCount').textContent = locaties.length;
 
     renderTable(voorstellingen);
@@ -96,5 +107,5 @@ fetch(dataUrl)
     console.error('Fout bij ophalen voorstellingen:', err);
     const empty = document.getElementById('emptyState');
     empty.style.display = 'block';
-    empty.querySelector('p').textContent = 'Kon voorstellingen niet laden.';
+    empty.querySelector('p').textContent = 'Voorstellingen konden niet worden geladen. Probeer opnieuw.';
   });
