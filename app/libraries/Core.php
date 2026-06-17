@@ -6,6 +6,7 @@ class Core
     protected $currentMethod = 'index';
     protected $params = [];
 
+    // Parse de URL en laad de bijbehorende controller + methode + parameters
     public function __construct()
     {
         $url = $this->getURL();
@@ -37,6 +38,7 @@ class Core
         call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
     }
 
+    // Toon een 404-pagina als de route niet bestaat
     private function renderNotFound()
     {
         $data = [
@@ -50,6 +52,7 @@ class Core
         require_once APPROOT . '/views/errors/notfound.php';
     }
 
+    // Haal de URL op uit $_GET['url'] of geef standaard homepages/index terug
     public function getURL()
     {
         if (isset($_GET['url']) && $_GET['url'] !== '') {
@@ -58,7 +61,6 @@ class Core
             return explode('/', $url);
         }
 
-        // Geen URL? Dan homepages/index
         return ['homepages', 'index'];
     }
 }

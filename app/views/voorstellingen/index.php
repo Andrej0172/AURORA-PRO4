@@ -2,6 +2,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 
+<!-- Voorstellingen overzicht pagina -->
 <div class="container voorstellingen-container">
 
     <div class="topbar">
@@ -11,6 +12,7 @@
                 <i class="ti ti-search"></i>
                 <input type="text" id="searchInput" placeholder="Zoek op titel, datum of locatie..." oninput="filterTable()" />
             </div>
+            <!-- Alleen medewerkers zien de knop om voorstellingen toe te voegen -->
             <?php if (isset($_SESSION['account_id']) && strtolower($_SESSION['rol'] ?? '') === 'medewerker') : ?>
                 <a href="<?= URLROOT ?>VoorstellingenController/toevoegen" class="btn btn-primary">
                     <i class="ti ti-plus"></i> Voorstelling toevoegen
@@ -19,12 +21,14 @@
         </div>
     </div>
 
+    <!-- Flash-melding na toevoegen/wijzigen -->
     <?php if (isset($data['melding']) && $data['melding'] !== '') : ?>
         <div class="alert <?= !empty($data['fout']) ? 'alert-error' : 'alert-success'; ?>">
             <?= htmlspecialchars($data['melding']); ?>
         </div>
     <?php endif; ?>
 
+    <!-- Statistiekkaarten -->
     <div class="stats">
         <div class="stat-card">
             <div class="label">Totaal voorstellingen</div>
@@ -40,6 +44,7 @@
         </div>
     </div>
 
+    <!-- Tabel met voorstellingen (wordt gevuld door JavaScript) -->
     <div class="table-wrap">
         <table>
             <thead>
@@ -52,6 +57,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
+        <!-- Wordt getoond als er geen resultaten zijn of bij een fout -->
         <div class="empty-state" id="emptyState" style="display:none;">
             <i class="ti ti-mood-empty"></i>
             <p>Geen voorstellingen gevonden.</p>

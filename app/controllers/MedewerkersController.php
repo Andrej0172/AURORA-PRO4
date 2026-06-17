@@ -1,13 +1,16 @@
 <?php
+// Controller voor het beheren van medewerkers (overzicht en toevoegen)
 class MedewerkersController extends BaseController
 {
     private $medewerkerModel;
 
+    // Laad het Medewerker-model bij instantiatie
     public function __construct()
     {
         $this->medewerkerModel = $this->model('Medewerker');
     }
 
+    // Toon de overzichtspagina met flash-meldingen uit de sessie (alleen voor medewerkers)
     public function index()
     {
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
@@ -18,6 +21,7 @@ class MedewerkersController extends BaseController
         $melding = '';
         $fout = false;
 
+        // Lees en verwijder eventuele flash-melding uit de sessie
         if (isset($_SESSION['medewerker_melding'])) {
             $melding = $_SESSION['medewerker_melding'];
             $fout = !empty($_SESSION['medewerker_melding_fout']);
@@ -33,8 +37,10 @@ class MedewerkersController extends BaseController
         ]);
     }
 
+    // JSON-endpoint: haal alle medewerkers op voor de JavaScript-tabel
     public function data()
     {
+        // Alleen ingelogde medewerkers mogen de data zien
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
             http_response_code(403);
             echo json_encode(['error' => 'Geen toegang']);
@@ -45,6 +51,7 @@ class MedewerkersController extends BaseController
 
         $medewerkers = $this->medewerkerModel->getAll();
 
+        // null = databasefout, lege array = geen data
         if ($medewerkers === null) {
             http_response_code(500);
             echo json_encode(['error' => 'Medewerkers konden niet worden geladen. Probeer opnieuw.'], JSON_UNESCAPED_UNICODE);
@@ -63,8 +70,10 @@ class MedewerkersController extends BaseController
         exit;
     }
 
+    // Toon het toevoegformulier (GET) of verwerk de inzending (POST)
     public function toevoegen()
     {
+        // Alleen ingelogde medewerkers mogen medewerkers toevoegen
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
             header('Location: ' . URLROOT . 'AccountsController/login');
             exit;
@@ -77,16 +86,19 @@ class MedewerkersController extends BaseController
 
             $foutmelding = '';
 
+            // Validatie: alle velden zijn verplicht
             if ($naam === '' || $functie === '' || $afdeling === '') {
                 $foutmelding = 'Vul alle verplichte velden in.';
             }
 
+            // Controleer op duplicaten voordat we opslaan
             if ($foutmelding === '') {
                 if ($this->medewerkerModel->existsByNaam($naam)) {
                     $foutmelding = 'De medewerker bestaat al en kan niet worden toegevoegd.';
                 }
             }
 
+            // Geen fouten? Probeer op te slaan in de database
             if ($foutmelding === '') {
                 $succes = $this->medewerkerModel->create([
                     'naam'     => $naam,
@@ -101,9 +113,11 @@ class MedewerkersController extends BaseController
                     exit;
                 }
 
+                // Opslaan mislukt (bijv. databasefout)
                 $foutmelding = 'Medewerker kon niet worden toegevoegd. Probeer opnieuw.';
             }
 
+            // Toon het formulier opnieuw met de foutmelding en ingevulde waarden
             $this->view('medewerkers/toevoegen', [
                 'title'      => 'Medewerker toevoegen - Aurora Theater',
                 'activePage' => 'medewerkers',
@@ -114,6 +128,7 @@ class MedewerkersController extends BaseController
             return;
         }
 
+        // GET-verzoek: toon leeg formulier
         $this->view('medewerkers/toevoegen', [
             'title'      => 'Medewerker toevoegen - Aurora Theater',
             'activePage' => 'medewerkers',

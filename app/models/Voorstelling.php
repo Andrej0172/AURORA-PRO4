@@ -1,8 +1,10 @@
 <?php
+// Model voor het beheren van voorstellingen in de database
 class Voorstelling
 {
     private $db;
 
+    // Maak verbinding met de database via de Database-wrapper
     public function __construct()
     {
         try {
@@ -12,6 +14,7 @@ class Voorstelling
         }
     }
 
+    // Haal alle voorstellingen op, gesorteerd op datum (oplopend)
     public function getAll()
     {
         try {
@@ -25,6 +28,7 @@ class Voorstelling
         }
     }
 
+    // Voeg een nieuwe voorstelling toe en geef true/terug bij succes
     public function create($data)
     {
         try {
@@ -42,6 +46,7 @@ class Voorstelling
         }
     }
 
+    // Controleer of een voorstelling met exact dezelfde gegevens al bestaat
     public function existsByDetails($titel, $datum, $tijd, $zaal)
     {
         try {

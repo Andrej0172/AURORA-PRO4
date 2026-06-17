@@ -1,3 +1,4 @@
+// Kleurenschema's voor avatar-cirkels
 const avatarColors = [
   { bg: '#fdecea', txt: '#c43b2f' },
   { bg: '#e8f0fe', txt: '#1a73e8' },
@@ -8,6 +9,7 @@ const avatarColors = [
   { bg: '#e0f7fa', txt: '#00838f' },
 ];
 
+// CSS-klassen per afdeling voor de badge-kleuren
 const afdelingClass = {
   'Artistiek':  'badge-artistiek',
   'Techniek':   'badge-techniek',
@@ -18,11 +20,13 @@ const afdelingClass = {
 
 let medewerkers = [];
 
+// Maak initialen van een naam (bijv. "Jan Jansen" -> "JJ")
 function initials(naam) {
   const parts = naam.split(' ');
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
+// Teken de tabel met de meegegeven medewerkers
 function renderTable(data) {
   const tbody = document.getElementById('tableBody');
   const empty = document.getElementById('emptyState');
@@ -52,6 +56,7 @@ function renderTable(data) {
   }).join('');
 }
 
+// Filter medewerkers op zoekterm (naam, functie, afdeling)
 function filterTable() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const gefilterd = medewerkers.filter(m =>
@@ -62,6 +67,7 @@ function filterTable() {
   renderTable(gefilterd);
 }
 
+// Haal medewerkers op van de server en toon ze in de tabel
 fetch(dataUrl)
   .then(res => {
     if (!res.ok) throw new Error('Networkfout: ' + res.status);
@@ -80,6 +86,7 @@ fetch(dataUrl)
     renderTable(medewerkers);
   })
   .catch(err => {
+    // Toon foutmelding in de tabel bij server-/netwerkfout
     console.error('Fout bij ophalen medewerkers:', err);
     const empty = document.getElementById('emptyState');
     empty.style.display = 'block';

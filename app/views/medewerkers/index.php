@@ -2,6 +2,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 
+<!-- Medewerkers overzicht pagina -->
 <div class="container medewerkers-container">
 
     <div class="topbar">
@@ -17,12 +18,14 @@
         </div>
     </div>
 
+    <!-- Flash-melding na toevoegen/wijzigen -->
     <?php if (isset($data['melding']) && $data['melding'] !== '') : ?>
         <div class="alert <?= !empty($data['fout']) ? 'alert-error' : 'alert-success'; ?>">
             <?= htmlspecialchars($data['melding']); ?>
         </div>
     <?php endif; ?>
 
+    <!-- Statistiekkaarten -->
     <div class="stats">
         <div class="stat-card">
             <div class="label">Totaal medewerkers</div>
@@ -38,6 +41,7 @@
         </div>
     </div>
 
+    <!-- Tabel met medewerkers (wordt gevuld door JavaScript) -->
     <div class="table-wrap">
         <table>
             <thead>
@@ -49,6 +53,7 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
+        <!-- Wordt getoond als er geen resultaten zijn of bij een fout -->
         <div class="empty-state" id="emptyState" style="display:none;">
             <i class="ti ti-mood-empty"></i>
             <p>Geen medewerkers gevonden.</p>

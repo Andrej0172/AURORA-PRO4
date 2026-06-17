@@ -1,5 +1,6 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
+<!-- 404-pagina voor ongeldige routes -->
 <div class="onderhoud-wrapper">
     <div class="onderhoud-logo">
         <span class="logo-fit">AURORA</span><span class="logo-for">Theater</span>

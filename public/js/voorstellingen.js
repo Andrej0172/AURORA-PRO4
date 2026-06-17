@@ -1,5 +1,7 @@
+// Nederlandse maandnamen (afgekort)
 const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 
+// Kleurenschema's voor zaal-badges
 const locatieColors = [
   { bg: '#fdecea', txt: '#c43b2f', border: '#f5c6c2' },
   { bg: '#e8f0fe', txt: '#1a73e8', border: '#b8d0f8' },
@@ -14,6 +16,7 @@ let voorstellingen = [];
 let locatieColorMap = {};
 let colorIndex = 0;
 
+// Geef een kleur voor een zaal (vaste kleur per zaalnaam)
 function getLocatieColor(locatie) {
   if (!locatieColorMap[locatie]) {
     locatieColorMap[locatie] = locatieColors[colorIndex % locatieColors.length];
@@ -22,6 +25,7 @@ function getLocatieColor(locatie) {
   return locatieColorMap[locatie];
 }
 
+// Formatteer een datum naar dag/maand/jaar en volledige NL tekst
 function formatDatum(dateStr) {
   const d = new Date(dateStr);
   return {
@@ -32,12 +36,14 @@ function formatDatum(dateStr) {
   };
 }
 
+// Toon alleen uren:minuten van een tijdstring
 function formatTijd(tijdStr) {
   if (!tijdStr) return '';
   const parts = tijdStr.split(':');
   return parts[0] + ':' + parts[1];
 }
 
+// Teken de tabel met de meegegeven voorstellingen
 function renderTable(data) {
   const tbody = document.getElementById('tableBody');
   const empty = document.getElementById('emptyState');
@@ -76,6 +82,7 @@ function renderTable(data) {
   }).join('');
 }
 
+// Filter voorstellingen op zoekterm (titel, datum, zaal)
 function filterTable() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const gefilterd = voorstellingen.filter(v =>
@@ -86,6 +93,7 @@ function filterTable() {
   renderTable(gefilterd);
 }
 
+// Haal voorstellingen op van de server en toon ze in de tabel
 fetch(dataUrl)
   .then(res => {
     if (!res.ok) throw new Error('Networkfout: ' + res.status);
@@ -104,6 +112,7 @@ fetch(dataUrl)
     renderTable(voorstellingen);
   })
   .catch(err => {
+    // Toon foutmelding in de tabel bij server-/netwerkfout
     console.error('Fout bij ophalen voorstellingen:', err);
     const empty = document.getElementById('emptyState');
     empty.style.display = 'block';

@@ -25,7 +25,7 @@ class Database
         }
     }
 
-    // Prepare SQL query
+    // Bereid een SQL-query voor met PDO prepared statements
     public function query($sql)
     {
         if ($this->dbHandler === null) {

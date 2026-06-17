@@ -2,6 +2,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 
+<!-- Formulier om een nieuwe medewerker toe te voegen -->
 <div class="container medewerkers-container">
 
     <div class="topbar">
@@ -11,6 +12,7 @@
         </a>
     </div>
 
+    <!-- Toon foutmelding bij validatie-/databasefout -->
     <?php if ($data['foutmelding'] !== '') : ?>
         <div class="alert alert-error"><?= htmlspecialchars($data['foutmelding']); ?></div>
     <?php endif; ?>

@@ -1,18 +1,22 @@
 <?php
+// Controller voor het beheren van voorstellingen (overzicht en toevoegen)
 class VoorstellingenController extends BaseController
 {
     private $voorstellingModel;
 
+    // Laad het Voorstelling-model bij instantiatie
     public function __construct()
     {
         $this->voorstellingModel = $this->model('Voorstelling');
     }
 
+    // Toon de overzichtspagina met flash-meldingen uit de sessie
     public function index()
     {
         $melding = '';
         $fout = false;
 
+        // Lees en verwijder eventuele flash-melding uit de sessie
         if (isset($_SESSION['voorstelling_melding'])) {
             $melding = $_SESSION['voorstelling_melding'];
             $fout = !empty($_SESSION['voorstelling_melding_fout']);
@@ -28,12 +32,14 @@ class VoorstellingenController extends BaseController
         ]);
     }
 
+    // JSON-endpoint: haal alle voorstellingen op voor de JavaScript-tabel
     public function data()
     {
         header('Content-Type: application/json; charset=utf-8');
 
         $voorstellingen = $this->voorstellingModel->getAll();
 
+        // null = databasefout, lege array = geen data (beide zijn ok)
         if ($voorstellingen === null) {
             http_response_code(500);
             echo json_encode(['error' => 'Voorstellingen konden niet worden geladen. Probeer opnieuw.'], JSON_UNESCAPED_UNICODE);
@@ -53,8 +59,10 @@ class VoorstellingenController extends BaseController
         exit;
     }
 
+    // Toon het toevoegformulier (GET) of verwerk de inzending (POST)
     public function toevoegen()
     {
+        // Alleen ingelogde medewerkers mogen voorstellingen toevoegen
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
             header('Location: ' . URLROOT . 'AccountsController/login');
             exit;
@@ -68,6 +76,7 @@ class VoorstellingenController extends BaseController
 
             $foutmelding = '';
 
+            // Validatie van invoervelden
             if ($titel === '' || $datum === '' || $tijd === '' || $zaal === '') {
                 $foutmelding = 'Vul alle verplichte velden in.';
             } elseif (!strtotime($datum)) {
@@ -76,12 +85,14 @@ class VoorstellingenController extends BaseController
                 $foutmelding = 'Voer een geldige tijd in.';
             }
 
+            // Controleer op duplicaten voordat we opslaan
             if ($foutmelding === '') {
                 if ($this->voorstellingModel->existsByDetails($titel, $datum, $tijd, $zaal)) {
                     $foutmelding = 'De voorstelling bestaat al en kan niet worden toegevoegd.';
                 }
             }
 
+            // Geen fouten? Probeer op te slaan in de database
             if ($foutmelding === '') {
                 $succes = $this->voorstellingModel->create([
                     'titel' => $titel,
@@ -97,9 +108,11 @@ class VoorstellingenController extends BaseController
                     exit;
                 }
 
+                // Opslaan mislukt (bijv. databasefout)
                 $foutmelding = 'Voorstelling kon niet worden toegevoegd. Probeer opnieuw.';
             }
 
+            // Toon het formulier opnieuw met de foutmelding en ingevulde waarden
             $this->view('voorstellingen/toevoegen', [
                 'title'      => 'Voorstelling toevoegen - Aurora Theater',
                 'activePage' => 'voorstellingen',
@@ -110,6 +123,7 @@ class VoorstellingenController extends BaseController
             return;
         }
 
+        // GET-verzoek: toon leeg formulier
         $this->view('voorstellingen/toevoegen', [
             'title'      => 'Voorstelling toevoegen - Aurora Theater',
             'activePage' => 'voorstellingen',

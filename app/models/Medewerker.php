@@ -1,8 +1,10 @@
 <?php
+// Model voor het beheren van medewerkers in de database
 class Medewerker
 {
     private $db;
 
+    // Maak verbinding met de database via de Database-wrapper
     public function __construct()
     {
         try {
@@ -12,6 +14,7 @@ class Medewerker
         }
     }
 
+    // Haal alle medewerkers op, gesorteerd op naam (oplopend)
     public function getAll()
     {
         try {
@@ -25,6 +28,7 @@ class Medewerker
         }
     }
 
+    // Voeg een nieuwe medewerker toe en geef true/terug bij succes
     public function create($data)
     {
         try {
@@ -41,6 +45,7 @@ class Medewerker
         }
     }
 
+    // Controleer of een medewerker met dezelfde naam al bestaat
     public function existsByNaam($naam)
     {
         try {
