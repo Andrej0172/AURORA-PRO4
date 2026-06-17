@@ -6,11 +6,22 @@
 
     <div class="topbar">
         <h1><i class="ti ti-users"></i> Overzicht medewerkers</h1>
-        <div class="search-bar">
-            <i class="ti ti-search"></i>
-            <input type="text" id="searchInput" placeholder="Zoek op naam..." oninput="filterTable()" />
+        <div class="topbar-actions">
+            <div class="search-bar">
+                <i class="ti ti-search"></i>
+                <input type="text" id="searchInput" placeholder="Zoek op naam..." oninput="filterTable()" />
+            </div>
+            <a href="<?= URLROOT ?>MedewerkersController/toevoegen" class="btn btn-primary">
+                <i class="ti ti-plus"></i> Medewerker toevoegen
+            </a>
         </div>
     </div>
+
+    <?php if (isset($data['melding']) && $data['melding'] !== '') : ?>
+        <div class="alert <?= !empty($data['fout']) ? 'alert-error' : 'alert-success'; ?>">
+            <?= htmlspecialchars($data['melding']); ?>
+        </div>
+    <?php endif; ?>
 
     <div class="stats">
         <div class="stat-card">
