@@ -4,6 +4,8 @@
 -- Doel:       Nieuwe features: voorstellingen beheren en medewerkers beheren
 -- ************************************************************
 
+DROP DATABASE IF EXISTS AuroraDb;
+CREATE DATABASE AuroraDb;
 USE AuroraDb;
 
 -- Step : 01
