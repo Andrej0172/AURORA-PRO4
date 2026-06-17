@@ -52,6 +52,24 @@ class Database
         $this->statement->execute();
         return $this->statement->fetchAll(PDO::FETCH_OBJ);
     }
+
+    // Voer INSERT/UPDATE/DELETE-query uit zonder resultaten terug te geven.
+    public function execute()
+    {
+        if ($this->statement === null) {
+            throw new Exception("Query niet voorbereid");
+        }
+        return $this->statement->execute();
+    }
+
+    // Geef het laatste automatisch gegenereerde ID terug.
+    public function lastInsertId()
+    {
+        if ($this->dbHandler === null) {
+            throw new Exception("Database is niet beschikbaar");
+        }
+        return $this->dbHandler->lastInsertId();
+    }
 }
 
 
