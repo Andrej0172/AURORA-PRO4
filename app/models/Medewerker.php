@@ -14,17 +14,41 @@ class Medewerker
         }
     }
 
-    // Haal alle medewerkers op, gesorteerd op naam (oplopend)
+    // Haal alle medewerkers op: theater-medewerkers (AuroraDb) + account-medewerkers (AuroraAccountsDb).
+    // Valt terug op alleen account-medewerkers als de Medewerkers-tabel nog niet bestaat (migratie niet uitgevoerd).
     public function getAll()
     {
+        if ($this->db === null) {
+            return null;
+        }
+
         try {
-            if ($this->db === null) {
-                return null;
-            }
-            $this->db->query("SELECT Id, Naam, Functie, Afdeling FROM Medewerkers ORDER BY Naam ASC");
+            $this->db->query(
+                "SELECT Naam, Functie, Afdeling
+                 FROM Medewerkers
+                 UNION ALL
+                 SELECT TRIM(CONCAT(Voornaam, ' ', COALESCE(CONCAT(Tussenvoegsel, ' '), ''), Achternaam)),
+                        'Beheer', 'Administratie'
+                 FROM " . DB_NAME_ACCOUNTS . ".Accounts
+                 WHERE Rol = 'medewerker'
+                 ORDER BY Naam ASC"
+            );
             return $this->db->resultSet();
         } catch (Exception $e) {
-            return null;
+            // Medewerkers-tabel bestaat nog niet; toon alleen account-medewerkers
+            try {
+                $this->db->query(
+                    "SELECT TRIM(CONCAT(Voornaam, ' ', COALESCE(CONCAT(Tussenvoegsel, ' '), ''), Achternaam)) AS Naam,
+                            'Beheer' AS Functie,
+                            'Administratie' AS Afdeling
+                     FROM " . DB_NAME_ACCOUNTS . ".Accounts
+                     WHERE Rol = 'medewerker'
+                     ORDER BY Naam ASC"
+                );
+                return $this->db->resultSet();
+            } catch (Exception $e2) {
+                return null;
+            }
         }
     }
 
