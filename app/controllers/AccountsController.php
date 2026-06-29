@@ -784,4 +784,3 @@ class AccountsController extends BaseController
     }
 }
 
-
