@@ -783,4 +783,3 @@ class AccountsController extends BaseController
         exit;
     }
 }
-
