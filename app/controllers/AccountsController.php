@@ -486,6 +486,10 @@ class AccountsController extends BaseController
 
         $accounts = $this->accountModel->getAllAccounts();
 
+        $melding = $_SESSION['overzicht_melding'] ?? '';
+        $fout    = $_SESSION['overzicht_fout']    ?? '';
+        unset($_SESSION['overzicht_melding'], $_SESSION['overzicht_fout']);
+
         $this->view('accounts/overzicht', [
             'title'         => 'Accountenoverzicht - Aurora Theater',
             'documentTitle' => 'Aurora Theater - Accountenoverzicht',
@@ -496,8 +500,162 @@ class AccountsController extends BaseController
                 'achternaam' => $_SESSION['achternaam'],
                 'rol'        => $_SESSION['rol']
             ],
-            'accounts'      => $accounts
+            'accounts'      => $accounts,
+            'melding'       => $melding,
+            'fout'          => $fout
         ]);
+    }
+
+    // Account bijwerken (alleen medewerkers)
+    public function bijwerken($id = 0)
+    {
+        if (!isset($_SESSION['account_id'])) {
+            header('Location: ' . URLROOT . 'AccountsController/login');
+            exit;
+        }
+
+        if ($_SESSION['rol'] !== 'medewerker') {
+            header('Location: ' . URLROOT . 'AccountsController/index');
+            exit;
+        }
+
+        $accountId = (int)$id;
+        if ($accountId <= 0) {
+            header('Location: ' . URLROOT . 'AccountsController/overzicht');
+            exit;
+        }
+
+        $account = $this->accountModel->getAccountById($accountId);
+        if ($account === null) {
+            header('Location: ' . URLROOT . 'AccountsController/overzicht');
+            exit;
+        }
+
+        $lidmaatschappen = $this->accountModel->getAllLidmaatschappen();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $voornaam        = trim(isset($_POST['voornaam'])      ? $_POST['voornaam']      : '');
+            $tussenvoegsel   = trim(isset($_POST['tussenvoegsel']) ? $_POST['tussenvoegsel'] : '');
+            $achternaam      = trim(isset($_POST['achternaam'])    ? $_POST['achternaam']    : '');
+            $email           = trim(isset($_POST['email'])         ? $_POST['email']         : '');
+            $telefoon        = trim(isset($_POST['telefoon'])      ? $_POST['telefoon']      : '');
+            $geboortedatum   = trim(isset($_POST['geboortedatum']) ? $_POST['geboortedatum'] : '');
+            $rol             = isset($_POST['rol'])    ? $_POST['rol']    : 'lid';
+            $status          = isset($_POST['status']) ? $_POST['status'] : 'Actief';
+            $startDatum      = trim(isset($_POST['start_datum'])   ? $_POST['start_datum']   : '');
+            $eindDatum       = trim(isset($_POST['eind_datum'])    ? $_POST['eind_datum']    : '');
+            $lidmaatschapId  = isset($_POST['lidmaatschap_id'])    ? (int)$_POST['lidmaatschap_id'] : (int)$account['lidmaatschap_id'];
+            $wachtwoord      = isset($_POST['wachtwoord'])         ? $_POST['wachtwoord']    : '';
+            $bevestig        = isset($_POST['bevestig_wachtwoord'])? $_POST['bevestig_wachtwoord'] : '';
+
+            $fout = '';
+
+            if ($voornaam === '' || $achternaam === '' || $email === '' || $telefoon === '' || $geboortedatum === '' || $startDatum === '') {
+                $fout = 'Vul alle verplichte velden in.';
+            } elseif (!preg_match('/^06\d{8}$/', $telefoon)) {
+                $fout = 'Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers (bijv. 0612345678).';
+            } elseif (!in_array($rol, ['lid', 'medewerker'], true)) {
+                $fout = 'Ongeldige rol geselecteerd.';
+            } elseif (!in_array($status, ['Actief', 'Gepauzeerd', 'Verlopen', 'Opgezegd'], true)) {
+                $fout = 'Ongeldige status geselecteerd.';
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $fout = 'Voer een geldig e-mailadres in.';
+            } elseif ($this->accountModel->emailExistsForOther($email, $accountId)) {
+                $fout = 'Er bestaat al een account met dit e-mailadres.';
+            } elseif ($this->accountModel->telefoonExistsForOther($telefoon, $accountId)) {
+                $fout = 'Er bestaat al een account met dit telefoonnummer.';
+            } elseif ($wachtwoord !== '' && $wachtwoord !== $bevestig) {
+                $fout = 'De wachtwoorden komen niet overeen.';
+            } elseif ($wachtwoord !== '' && strlen($wachtwoord) < 6) {
+                $fout = 'Het wachtwoord moet minimaal 6 tekens bevatten.';
+            }
+
+            if ($fout === '') {
+                $succes = $this->accountModel->updateAccount($accountId, [
+                    'voornaam'        => $voornaam,
+                    'tussenvoegsel'   => $tussenvoegsel,
+                    'achternaam'      => $achternaam,
+                    'email'           => $email,
+                    'telefoon'        => $telefoon,
+                    'geboortedatum'   => $geboortedatum,
+                    'lidmaatschap_id' => $lidmaatschapId,
+                    'start_datum'     => $startDatum,
+                    'eind_datum'      => $eindDatum,
+                    'status'          => $status,
+                    'rol'             => $rol,
+                    'wachtwoord'      => $wachtwoord
+                ]);
+
+                if ($succes) {
+                    $_SESSION['overzicht_melding'] = 'Account van ' . htmlspecialchars($voornaam . ' ' . $achternaam) . ' bijgewerkt.';
+                    header('Location: ' . URLROOT . 'AccountsController/overzicht');
+                    exit;
+                }
+
+                $fout = 'Er is iets misgegaan. Probeer het opnieuw.';
+            }
+
+            $invoer = compact('voornaam', 'tussenvoegsel', 'achternaam', 'email', 'telefoon', 'geboortedatum', 'rol', 'status', 'startDatum', 'eindDatum', 'lidmaatschapId');
+            $this->view('accounts/bijwerken', [
+                'title'          => 'Account bijwerken - Aurora Theater',
+                'documentTitle'  => 'Aurora Theater - Account bijwerken',
+                'activePage'     => 'overzicht',
+                'styles'         => ['accounts.css'],
+                'foutmelding'    => $fout,
+                'account'        => $account,
+                'lidmaatschappen'=> $lidmaatschappen,
+                'invoer'         => $invoer
+            ]);
+            return;
+        }
+
+        $this->view('accounts/bijwerken', [
+            'title'          => 'Account bijwerken - Aurora Theater',
+            'documentTitle'  => 'Aurora Theater - Account bijwerken',
+            'activePage'     => 'overzicht',
+            'styles'         => ['accounts.css'],
+            'foutmelding'    => '',
+            'account'        => $account,
+            'lidmaatschappen'=> $lidmaatschappen,
+            'invoer'         => []
+        ]);
+    }
+
+    // Account verwijderen (alleen medewerkers)
+    public function verwijderen()
+    {
+        if (!isset($_SESSION['account_id'])) {
+            header('Location: ' . URLROOT . 'AccountsController/login');
+            exit;
+        }
+
+        if ($_SESSION['rol'] !== 'medewerker') {
+            header('Location: ' . URLROOT . 'AccountsController/index');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . URLROOT . 'AccountsController/overzicht');
+            exit;
+        }
+
+        $accountId = isset($_POST['account_id']) ? (int)$_POST['account_id'] : 0;
+        if ($accountId <= 0) {
+            header('Location: ' . URLROOT . 'AccountsController/overzicht');
+            exit;
+        }
+
+        $succes = $this->accountModel->deleteAccount($accountId);
+
+        if ($succes) {
+            $_SESSION['overzicht_melding'] = 'Account succesvol verwijderd.';
+        } else {
+            // Unhappy scenario: account bestond al niet meer (bijv. verwijderd in ander tabblad).
+            $_SESSION['overzicht_fout'] = 'Account kon niet worden verwijderd. Het account bestaat mogelijk niet meer.';
+        }
+
+        header('Location: ' . URLROOT . 'AccountsController/overzicht');
+        exit;
     }
 
     // Nieuw account aanmaken (alleen medewerkers)
