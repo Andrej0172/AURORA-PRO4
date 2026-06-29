@@ -687,6 +687,24 @@ class Account
 		}
 	}
 
+	public function telefoonExistsForOther($telefoon, $excludeAccountId)
+	{
+		if ($this->pdo === null) {
+			return false;
+		}
+
+		try {
+			$sql = 'SELECT COUNT(*) FROM Accounts WHERE Telefoon = :telefoon AND Id <> :id';
+			$statement = $this->pdo->prepare($sql);
+			$statement->bindValue(':telefoon', $telefoon, PDO::PARAM_STR);
+			$statement->bindValue(':id', (int)$excludeAccountId, PDO::PARAM_INT);
+			$statement->execute();
+			return (int)$statement->fetchColumn() > 0;
+		} catch (PDOException $e) {
+			return false;
+		}
+	}
+
 	public function registerAccount($data)
 	{
 		// Nieuwe registraties starten altijd als actief lid vanaf vandaag.
@@ -977,7 +995,8 @@ class Account
 			$statement = $this->pdo->prepare($sql);
 			$statement->bindValue(':id', (int)$accountId, PDO::PARAM_INT);
 			$statement->execute();
-			return true;
+			// rowCount() === 0 betekent dat het account al eerder verwijderd was.
+			return $statement->rowCount() > 0;
 		} catch (PDOException $e) {
 			return false;
 		}
