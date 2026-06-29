@@ -12,10 +12,11 @@
         </div>
     </div>
 
-    <?php // Succesmelding tonen na het aanmaken van een account; daarna direct verwijderen uit de sessie. ?>
-    <?php if (!empty($_SESSION['overzicht_melding'])) : ?>
-        <div class="account-alert account-alert-succes"><?= htmlspecialchars($_SESSION['overzicht_melding']); ?></div>
-        <?php unset($_SESSION['overzicht_melding']); ?>
+    <?php if (!empty($data['melding'])) : ?>
+        <div class="account-alert account-alert-succes"><?= htmlspecialchars($data['melding']); ?></div>
+    <?php endif; ?>
+    <?php if (!empty($data['fout'])) : ?>
+        <div class="account-alert account-alert-error"><?= htmlspecialchars($data['fout']); ?></div>
     <?php endif; ?>
 
     <?php // null = databasefout; lege array = geen accounts; anders tabel tonen. ?>
@@ -84,6 +85,7 @@
                             <th>Telefoon</th>
                             <th>Rol</th>
                             <th>Status</th>
+                            <th>Acties</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -110,6 +112,13 @@
                                     <span class="overzicht-badge overzicht-badge-status-<?= htmlspecialchars($status); ?>">
                                         <?= htmlspecialchars(ucfirst($account->status)); ?>
                                     </span>
+                                </td>
+                                <td class="overzicht-acties">
+                                    <a href="<?= URLROOT; ?>AccountsController/bijwerken/<?= (int)$account->id; ?>" class="overzicht-actie-knop overzicht-actie-bijwerken">Bijwerken</a>
+                                    <form action="<?= URLROOT; ?>AccountsController/verwijderen" method="POST" class="overzicht-verwijder-form">
+                                        <input type="hidden" name="account_id" value="<?= (int)$account->id; ?>">
+                                        <button type="submit" class="overzicht-actie-knop overzicht-actie-verwijderen" onclick="return confirm('Weet je zeker dat je dit account wilt verwijderen?')">Verwijderen</button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
