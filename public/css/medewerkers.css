@@ -223,6 +223,55 @@
   border-color: #ccc;
 }
 
+/* Actieknoppen in tabel */
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn-edit {
+  background: #e8f0fe;
+  color: #1a73e8;
+  border-color: #b8d0f8;
+}
+
+.btn-edit:hover {
+  background: #d2e3fc;
+  color: #1557b0;
+  border-color: #8ab4f8;
+}
+
+.btn-delete {
+  background: #fdecea;
+  color: #c43b2f;
+  border-color: #f5c6c2;
+}
+
+.btn-delete:hover {
+  background: #f8d7da;
+  color: #a83228;
+  border-color: #f1a0a0;
+}
+
+.text-muted {
+  color: #bbb;
+  font-size: 12px;
+}
+
 /* Alerts */
 .alert {
   padding: 12px 16px;
