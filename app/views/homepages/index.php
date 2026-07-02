@@ -1,5 +1,6 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
+<!-- Statische homepage met uitleg over Aurora Theater -->
 <main class="inhoud">
     <section class="waarom">
         <p class="sectie-sub" style="margin-top:60px;">Over Aurora</p>

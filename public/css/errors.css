@@ -1,3 +1,4 @@
+/* Gedeelde styling voor foutpagina's (404, uitloggen mislukt) en de onderhoudspagina */
 .error-wrapper,
 .onderhoud-wrapper {
     min-height: calc(100vh - 72px);

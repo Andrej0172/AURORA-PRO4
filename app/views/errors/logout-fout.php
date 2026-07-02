@@ -1,5 +1,6 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
+<!-- Foutpagina die getoond wordt als uitloggen (gesimuleerd) mislukt -->
 <div class="onderhoud-wrapper">
     <div class="onderhoud-logo">
         <span class="logo-fit">AURORA</span><span class="logo-for">Theater</span>

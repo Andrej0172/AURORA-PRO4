@@ -104,6 +104,7 @@ class Medewerker
         }
     }
 
+    // Haal één medewerker op basis van id (voor het wijzigformulier)
     public function getById($id)
     {
         try {
@@ -119,6 +120,7 @@ class Medewerker
         }
     }
 
+    // Werk een bestaande medewerker bij en geef true/false terug bij succes
     public function update($id, $data)
     {
         try {
@@ -136,6 +138,7 @@ class Medewerker
         }
     }
 
+    // Verwijder een medewerker op basis van id
     public function delete($id)
     {
         try {

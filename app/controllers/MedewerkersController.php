@@ -139,6 +139,7 @@ class MedewerkersController extends BaseController
         ]);
     }
 
+    // Toon het wijzigformulier (GET) of verwerk de inzending (POST) voor een bestaande medewerker
     public function wijzigen($id = null)
     {
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
@@ -219,6 +220,7 @@ class MedewerkersController extends BaseController
         ]);
     }
 
+    // Verwijder een medewerker op basis van id (alleen via POST)
     public function verwijderen($id = null)
     {
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {

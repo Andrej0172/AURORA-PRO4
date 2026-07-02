@@ -1,3 +1,4 @@
+<!-- Gedeelde header/layout-opening, geladen door elke view; sluit af in footer.php -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>

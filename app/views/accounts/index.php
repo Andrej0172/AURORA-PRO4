@@ -1,5 +1,6 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
+<!-- Persoonlijk accountoverzicht voor de ingelogde gebruiker -->
 <?php if (!empty($data['foutmelding'])) : ?>
 <div class="account-page">
     <div class="account-alert account-alert-error"><?= htmlspecialchars($data['foutmelding']); ?></div>

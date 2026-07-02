@@ -54,6 +54,7 @@ class Account
 		}
 	}
 
+	// Haal een volledig accountprofiel op inclusief lidmaatschapgegevens.
 	public function getAccountById($accountId)
 	{
 		if ($this->pdo === null) {
@@ -95,6 +96,7 @@ class Account
 		}
 	}
 
+	// Haal alleen de gegevens op die de header/layout nodig heeft (naam en rol).
 	public function getAccountHeaderById($accountId)
 	{
 		if ($this->pdo === null) {
@@ -121,6 +123,7 @@ class Account
 		}
 	}
 
+	// Tel het aantal niet-geannuleerde reserveringen voor een les op een specifieke datum.
 	public function getAantalReserveringen($lesId, $datum)
 	{
 		if ($this->pdo === null) {
@@ -139,6 +142,7 @@ class Account
 		}
 	}
 
+	// Controleer of een account al een (niet-geannuleerde) reservering heeft voor deze les/datum.
 	public function heeftAlGereserveerd($accountId, $lesId, $datum)
 	{
 		if ($this->pdo === null) {
@@ -158,6 +162,7 @@ class Account
 		}
 	}
 
+	// Geef de lijst met les-id's terug waarvoor dit account al gereserveerd heeft.
 	public function getGereserveerdeLesIds($accountId)
 	{
 		if ($this->pdo === null) {
@@ -372,6 +377,7 @@ class Account
 		}
 	}
 
+	// Zet een reservering op 'Geannuleerd' voor het gegeven account, les en datum.
 	public function annuleerReservering($accountId, $lesId, $datum)
 	{
 		if ($this->pdo === null) {
@@ -391,6 +397,7 @@ class Account
 		}
 	}
 
+	// Maak een nieuwe reservering aan met status 'Bevestigd'.
 	public function reserveerLes($accountId, $lesId, $datum)
 	{
 		if ($this->pdo === null) {
@@ -516,6 +523,7 @@ class Account
 		}
 	}
 
+	// Verwijder een remember-token, bijvoorbeeld bij uitloggen.
 	public function deleteRememberToken($hashedToken)
 	{
 		if ($this->pdo === null) {
@@ -552,6 +560,7 @@ class Account
 		}
 	}
 
+	// Haal de opgeslagen profielfoto (binary data + mimetype) op, met een veilige fallback-mime.
 	public function getProfielFoto($accountId)
 	{
 		if ($this->pdo === null) {
@@ -629,6 +638,7 @@ class Account
 		}
 	}
 
+	// Werk de accountstatus bij, mits de nieuwe status in de toegestane whitelist staat.
 	public function updateStatus($accountId, $status)
 	{
 		if ($this->pdo === null) {
@@ -652,6 +662,7 @@ class Account
 		}
 	}
 
+	// Controleer of een e-mailadres al in gebruik is (voor registratie).
 	public function emailExists($email)
 	{
 		if ($this->pdo === null) {
@@ -669,6 +680,7 @@ class Account
 		}
 	}
 
+	// Controleer of een e-mailadres al in gebruik is door een ander account (bij bewerken).
 	public function emailExistsForOther($email, $excludeAccountId)
 	{
 		if ($this->pdo === null) {
@@ -687,6 +699,7 @@ class Account
 		}
 	}
 
+	// Controleer of een telefoonnummer al in gebruik is door een ander account (bij bewerken).
 	public function telefoonExistsForOther($telefoon, $excludeAccountId)
 	{
 		if ($this->pdo === null) {
@@ -817,6 +830,7 @@ class Account
 		}
 	}
 
+	// Haal alle accounts met de rol 'medewerker' op, alfabetisch gesorteerd.
 	public function getMedewerkers()
 	{
 		if ($this->pdo === null) {
@@ -888,6 +902,7 @@ class Account
 		}
 	}
 
+	// Maak een account aan met volledig zelf op te geven velden (o.a. status, rol, data's).
 	public function createAccount($data)
 	{
 		if ($this->pdo === null) {
@@ -919,6 +934,7 @@ class Account
 		}
 	}
 
+	// Werk een bestaand account volledig bij; wachtwoord wordt alleen bijgewerkt als er een nieuw is opgegeven.
 	public function updateAccount($accountId, $data)
 	{
 		if ($this->pdo === null) {

@@ -1,5 +1,6 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
+<!-- Instellingenpagina met accountgegevens van de ingelogde gebruiker -->
 <?php
 $volledigeNaam = trim(isset($data['volledigeNaam']) ? $data['volledigeNaam'] : '');
 if ($volledigeNaam === '') {

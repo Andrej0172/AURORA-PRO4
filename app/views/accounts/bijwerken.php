@@ -1,5 +1,6 @@
 <?php require_once APPROOT . '/views/includes/header.php'; ?>
 
+<!-- Formulier waarmee een medewerker een bestaand account volledig kan bewerken -->
 <?php
 $invoer  = isset($data['invoer'])  ? $data['invoer']  : [];
 $account = isset($data['account']) ? $data['account'] : [];
