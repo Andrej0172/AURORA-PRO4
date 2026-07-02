@@ -139,12 +139,15 @@ class MedewerkersController extends BaseController
         ]);
     }
 
-    // Toon het wijzigformulier (GET) of verwerk de wijziging (POST)
     public function wijzigen($id = null)
     {
-        // Alleen ingelogde medewerkers
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
             header('Location: ' . URLROOT . 'AccountsController/login');
+            exit;
+        }
+
+        if ($id === null || !ctype_digit((string)$id)) {
+            header('Location: ' . URLROOT . 'MedewerkersController/index');
             exit;
         }
 
@@ -155,19 +158,16 @@ class MedewerkersController extends BaseController
 
             $foutmelding = '';
 
-            // Validatie: alle velden zijn verplicht
             if ($naam === '' || $functie === '' || $afdeling === '') {
                 $foutmelding = 'Vul alle verplichte velden in.';
             }
 
-            // Controleer op duplicaten (naam mag niet al bestaan bij een andere medewerker)
             if ($foutmelding === '') {
                 if ($this->medewerkerModel->existsByNaamExcludingId($naam, $id)) {
                     $foutmelding = 'Deze naam is al in gebruik door een andere medewerker.';
                 }
             }
 
-            // Geen fouten? Probeer bij te werken in de database
             if ($foutmelding === '') {
                 $succes = $this->medewerkerModel->update($id, [
                     'naam'     => $naam,
@@ -182,11 +182,9 @@ class MedewerkersController extends BaseController
                     exit;
                 }
 
-                // Update mislukt (bijv. databasefout)
                 $foutmelding = 'Medewerker kon niet worden gewijzigd. Probeer opnieuw.';
             }
 
-            // Toon het formulier opnieuw met de foutmelding en ingevulde waarden
             $this->view('medewerkers/wijzigen', [
                 'title'      => 'Medewerker wijzigen - Aurora Theater',
                 'activePage' => 'medewerkers',
@@ -198,7 +196,6 @@ class MedewerkersController extends BaseController
             return;
         }
 
-        // GET-verzoek: haal de huidige gegevens op en toon het formulier
         $medewerker = $this->medewerkerModel->getById($id);
 
         if (!$medewerker) {
@@ -222,18 +219,15 @@ class MedewerkersController extends BaseController
         ]);
     }
 
-    // Verwijder een medewerker (alleen POST)
     public function verwijderen($id = null)
     {
-        // Alleen ingelogde medewerkers
         if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
             header('Location: ' . URLROOT . 'AccountsController/login');
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Controleer of de medewerker nog bestaat (voorkom dubbel verwijderen in 2 tabs)
-            $medewerker = $this->medewerkerModel->getById($id);
+           $medewerker = $this->medewerkerModel->getById($id);
 
             if (!$medewerker) {
                 $_SESSION['medewerker_melding'] = 'Medewerker kon niet worden verwijderd omdat deze niet meer bestaat.';

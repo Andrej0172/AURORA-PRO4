@@ -20,10 +20,15 @@ const afdelingClass = {
 
 let medewerkers = [];
 
+function escHtml(str) {
+  return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 // Maak initialen van een naam (bijv. "Jan Jansen" -> "JJ")
 function initials(naam) {
-  const parts = naam.split(' ');
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  const parts = (naam ?? '').trim().split(/\s+/).filter(p => p.length > 0);
+  if (parts.length === 0) return '?';
+  return ((parts[0][0] ?? '') + (parts[parts.length - 1][0] ?? '')).toUpperCase() || '?';
 }
 
 // Teken de tabel met de meegegeven medewerkers
@@ -42,28 +47,29 @@ function renderTable(data) {
   tbody.innerHTML = data.map((m, i) => {
     const c = avatarColors[i % avatarColors.length];
     const badgeClass = afdelingClass[m.afdeling] || 'badge-artistiek';
+    const actions = m.id
+      ? `<div class="action-buttons">
+        <a href="${baseUrl}wijzigen/${m.id}" class="btn-action btn-edit" title="Wijzigen">
+          <i class="ti ti-edit"></i>
+        </a>
+        <form action="${baseUrl}verwijderen/${m.id}" method="POST" style="display:inline;" onsubmit="return confirm('Weet u zeker dat u deze medewerker wilt verwijderen?');">
+          <button type="submit" class="btn-action btn-delete" title="Verwijderen">
+            <i class="ti ti-trash"></i>
+          </button>
+        </form>
+      </div>` : '<span class="text-muted">-</span>';
+
     return `
       <tr>
         <td>
           <div class="name-cell">
             <span class="avatar" style="background:${c.bg}; color:${c.txt};">${initials(m.naam)}</span>
-            ${m.naam}
+            ${escHtml(m.naam)}
           </div>
         </td>
-        <td>${m.functie}</td>
-        <td><span class="badge ${badgeClass}">${m.afdeling}</span></td>
-        <td class="actions-cell">
-          ${m.id ? `
-            <a href="${baseUrl}MedewerkersController/wijzigen/${m.id}" class="btn-action btn-edit" title="Wijzigen">
-              <i class="ti ti-edit"></i>
-            </a>
-            <form action="${baseUrl}MedewerkersController/verwijderen/${m.id}" method="POST" style="display:inline;" onsubmit="return confirm('Weet u zeker dat u deze medewerker wilt verwijderen?');">
-              <button type="submit" class="btn-action btn-delete" title="Verwijderen">
-                <i class="ti ti-trash"></i>
-              </button>
-            </form>
-          ` : `<span class="text-muted">-</span>`}
-        </td>
+        <td>${escHtml(m.functie)}</td>
+        <td><span class="badge ${badgeClass}">${escHtml(m.afdeling)}</span></td>
+        <td class="actions-cell">${actions}</td>
       </tr>`;
   }).join('');
 }
@@ -80,7 +86,7 @@ function filterTable() {
 }
 
 // Haal medewerkers op van de server en toon ze in de tabel
-fetch(dataUrl)
+fetch(baseUrl + 'data')
   .then(res => {
     if (!res.ok) throw new Error('Networkfout: ' + res.status);
     return res.json();

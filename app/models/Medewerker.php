@@ -88,7 +88,6 @@ class Medewerker
         }
     }
 
-    // Controleer of een medewerker met dezelfde naam al bestaat, een andere id uitgezonderd (voor wijzigen)
     public function existsByNaamExcludingId($naam, $excludeId)
     {
         try {
@@ -105,7 +104,6 @@ class Medewerker
         }
     }
 
-    // Haal een medewerker op basis van Id
     public function getById($id)
     {
         try {
@@ -121,7 +119,6 @@ class Medewerker
         }
     }
 
-    // Update een bestaande medewerker
     public function update($id, $data)
     {
         try {
@@ -139,7 +136,6 @@ class Medewerker
         }
     }
 
-    // Verwijder een medewerker op basis van Id
     public function delete($id)
     {
         try {
