@@ -213,4 +213,36 @@ class MedewerkersController extends BaseController
             'medewerkerId' => $id
         ]);
     }
+
+    public function verwijderen($id = null)
+    {
+        if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
+            header('Location: ' . URLROOT . 'AccountsController/login');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $medewerker = $this->medewerkerModel->getById($id);
+
+            if (!$medewerker) {
+                $_SESSION['medewerker_melding'] = 'Medewerker kon niet worden verwijderd omdat deze niet meer bestaat.';
+                $_SESSION['medewerker_melding_fout'] = true;
+                header('Location: ' . URLROOT . 'MedewerkersController/index');
+                exit;
+            }
+
+            $succes = $this->medewerkerModel->delete($id);
+
+            if ($succes) {
+                $_SESSION['medewerker_melding'] = 'Medewerker succesvol verwijderd.';
+                $_SESSION['medewerker_melding_fout'] = false;
+            } else {
+                $_SESSION['medewerker_melding'] = 'Medewerker kon niet worden verwijderd. Probeer opnieuw.';
+                $_SESSION['medewerker_melding_fout'] = true;
+            }
+        }
+
+        header('Location: ' . URLROOT . 'MedewerkersController/index');
+        exit;
+    }
 }
