@@ -138,4 +138,79 @@ class MedewerkersController extends BaseController
             'invoer'     => ['naam' => '', 'functie' => '', 'afdeling' => '']
         ]);
     }
+
+    public function wijzigen($id = null)
+    {
+        if (!isset($_SESSION['account_id']) || strtolower($_SESSION['rol'] ?? '') !== 'medewerker') {
+            header('Location: ' . URLROOT . 'AccountsController/login');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $naam     = trim($_POST['naam'] ?? '');
+            $functie  = trim($_POST['functie'] ?? '');
+            $afdeling = trim($_POST['afdeling'] ?? '');
+
+            $foutmelding = '';
+
+            if ($naam === '' || $functie === '' || $afdeling === '') {
+                $foutmelding = 'Vul alle verplichte velden in.';
+            }
+
+            if ($foutmelding === '') {
+                if ($this->medewerkerModel->existsByNaamExcludingId($naam, $id)) {
+                    $foutmelding = 'Deze naam is al in gebruik door een andere medewerker.';
+                }
+            }
+
+            if ($foutmelding === '') {
+                $succes = $this->medewerkerModel->update($id, [
+                    'naam'     => $naam,
+                    'functie'  => $functie,
+                    'afdeling' => $afdeling,
+                ]);
+
+                if ($succes) {
+                    $_SESSION['medewerker_melding'] = 'Medewerker succesvol gewijzigd.';
+                    $_SESSION['medewerker_melding_fout'] = false;
+                    header('Location: ' . URLROOT . 'MedewerkersController/index');
+                    exit;
+                }
+
+                $foutmelding = 'Medewerker kon niet worden gewijzigd. Probeer opnieuw.';
+            }
+
+            $this->view('medewerkers/wijzigen', [
+                'title'      => 'Medewerker wijzigen - Aurora Theater',
+                'activePage' => 'medewerkers',
+                'styles'     => ['medewerkers.css'],
+                'foutmelding' => $foutmelding,
+                'invoer'     => compact('naam', 'functie', 'afdeling'),
+                'medewerkerId' => $id
+            ]);
+            return;
+        }
+
+        $medewerker = $this->medewerkerModel->getById($id);
+
+        if (!$medewerker) {
+            $_SESSION['medewerker_melding'] = 'Medewerker niet gevonden.';
+            $_SESSION['medewerker_melding_fout'] = true;
+            header('Location: ' . URLROOT . 'MedewerkersController/index');
+            exit;
+        }
+
+        $this->view('medewerkers/wijzigen', [
+            'title'      => 'Medewerker wijzigen - Aurora Theater',
+            'activePage' => 'medewerkers',
+            'styles'     => ['medewerkers.css'],
+            'foutmelding' => '',
+            'invoer'     => [
+                'naam'     => $medewerker->Naam,
+                'functie'  => $medewerker->Functie,
+                'afdeling' => $medewerker->Afdeling,
+            ],
+            'medewerkerId' => $id
+        ]);
+    }
 }
