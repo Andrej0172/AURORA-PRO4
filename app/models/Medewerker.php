@@ -24,11 +24,13 @@ class Medewerker
 
         try {
             $this->db->query(
-                "SELECT Naam, Functie, Afdeling
+                "SELECT Id, Naam, Functie, Afdeling
                  FROM Medewerkers
                  UNION ALL
-                 SELECT TRIM(CONCAT(Voornaam, ' ', COALESCE(CONCAT(Tussenvoegsel, ' '), ''), Achternaam)),
-                        'Beheer', 'Administratie'
+                 SELECT NULL AS Id,
+                        TRIM(CONCAT(Voornaam, ' ', COALESCE(CONCAT(Tussenvoegsel, ' '), ''), Achternaam)) AS Naam,
+                        'Beheer' AS Functie,
+                        'Administratie' AS Afdeling
                  FROM " . DB_NAME_ACCOUNTS . ".Accounts
                  WHERE Rol = 'medewerker'
                  ORDER BY Naam ASC"
@@ -38,7 +40,8 @@ class Medewerker
             // Medewerkers-tabel bestaat nog niet; toon alleen account-medewerkers
             try {
                 $this->db->query(
-                    "SELECT TRIM(CONCAT(Voornaam, ' ', COALESCE(CONCAT(Tussenvoegsel, ' '), ''), Achternaam)) AS Naam,
+                    "SELECT NULL AS Id,
+                            TRIM(CONCAT(Voornaam, ' ', COALESCE(CONCAT(Tussenvoegsel, ' '), ''), Achternaam)) AS Naam,
                             'Beheer' AS Functie,
                             'Administratie' AS Afdeling
                      FROM " . DB_NAME_ACCOUNTS . ".Accounts

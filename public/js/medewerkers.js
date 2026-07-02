@@ -53,14 +53,16 @@ function renderTable(data) {
         <td>${m.functie}</td>
         <td><span class="badge ${badgeClass}">${m.afdeling}</span></td>
         <td class="actions-cell">
-          <a href="${baseUrl}MedewerkersController/wijzigen/${m.id}" class="btn-action btn-edit" title="Wijzigen">
-            <i class="ti ti-edit"></i>
-          </a>
-          <form action="${baseUrl}MedewerkersController/verwijderen/${m.id}" method="POST" style="display:inline;" onsubmit="return confirm('Weet u zeker dat u deze medewerker wilt verwijderen?');">
-            <button type="submit" class="btn-action btn-delete" title="Verwijderen">
-              <i class="ti ti-trash"></i>
-            </button>
-          </form>
+          ${m.id ? `
+            <a href="${baseUrl}MedewerkersController/wijzigen/${m.id}" class="btn-action btn-edit" title="Wijzigen">
+              <i class="ti ti-edit"></i>
+            </a>
+            <form action="${baseUrl}MedewerkersController/verwijderen/${m.id}" method="POST" style="display:inline;" onsubmit="return confirm('Weet u zeker dat u deze medewerker wilt verwijderen?');">
+              <button type="submit" class="btn-action btn-delete" title="Verwijderen">
+                <i class="ti ti-trash"></i>
+              </button>
+            </form>
+          ` : `<span class="text-muted">-</span>`}
         </td>
       </tr>`;
   }).join('');

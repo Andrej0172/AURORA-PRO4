@@ -60,7 +60,7 @@ class MedewerkersController extends BaseController
 
         $result = array_map(function ($m) {
             return [
-                'id'       => (int)$m->Id,
+                'id'       => isset($m->Id) ? (int)$m->Id : null,
                 'naam'     => $m->Naam,
                 'functie'  => $m->Functie,
                 'afdeling' => $m->Afdeling,
