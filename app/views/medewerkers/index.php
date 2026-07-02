@@ -63,7 +63,7 @@
 
 </div>
 
-<script>const dataUrl = '<?= URLROOT ?>MedewerkersController/data';</script>
+<script>const baseUrl = '<?= URLROOT ?>MedewerkersController/';</script>
 <script src="<?= URLROOT ?>js/medewerkers.js"></script>
 
 <?php require_once APPROOT . '/views/includes/footer.php'; ?>
