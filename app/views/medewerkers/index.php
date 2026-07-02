@@ -49,6 +49,7 @@
                     <th>Naam</th>
                     <th>Functie</th>
                     <th>Afdeling</th>
+                    <th>Acties</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>
