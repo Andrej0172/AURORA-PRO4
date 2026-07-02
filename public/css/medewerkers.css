@@ -285,3 +285,45 @@
   gap: 10px;
   margin-top: 1.5rem;
 }
+
+/* Actieknoppen in tabel */
+.actions-cell {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 15px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-edit {
+  background: #e8f0fe;
+  color: #1a73e8;
+  border-color: #b8d0f8;
+}
+
+.btn-edit:hover {
+  background: #d2e3fc;
+  border-color: #1a73e8;
+}
+
+.btn-delete {
+  background: #fdecea;
+  color: #c43b2f;
+  border-color: #f5c6c2;
+}
+
+.btn-delete:hover {
+  background: #f5c6c2;
+  border-color: #c43b2f;
+}

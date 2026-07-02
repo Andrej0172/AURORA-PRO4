@@ -49,6 +49,7 @@
                     <th>Naam</th>
                     <th>Functie</th>
                     <th>Afdeling</th>
+                    <th>Acties</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>
@@ -62,7 +63,7 @@
 
 </div>
 
-<script>const dataUrl = '<?= URLROOT ?>MedewerkersController/data';</script>
+<script>const dataUrl = '<?= URLROOT ?>MedewerkersController/data'; const baseUrl = '<?= URLROOT ?>';</script>
 <script src="<?= URLROOT ?>js/medewerkers.js"></script>
 
 <?php require_once APPROOT . '/views/includes/footer.php'; ?>
