@@ -84,4 +84,66 @@ class Medewerker
             return false;
         }
     }
+
+    public function existsByNaamExcludingId($naam, $excludeId)
+    {
+        try {
+            if ($this->db === null) {
+                return false;
+            }
+            $this->db->query("SELECT COUNT(*) AS cnt FROM Medewerkers WHERE Naam = :naam AND Id != :id");
+            $this->db->bind(':naam', $naam, PDO::PARAM_STR);
+            $this->db->bind(':id', $excludeId, PDO::PARAM_INT);
+            $result = $this->db->resultSet();
+            return (int)$result[0]->cnt > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function getById($id)
+    {
+        try {
+            if ($this->db === null) {
+                return null;
+            }
+            $this->db->query("SELECT Id, Naam, Functie, Afdeling FROM Medewerkers WHERE Id = :id");
+            $this->db->bind(':id', $id, PDO::PARAM_INT);
+            $result = $this->db->resultSet();
+            return !empty($result) ? $result[0] : null;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function update($id, $data)
+    {
+        try {
+            if ($this->db === null) {
+                return false;
+            }
+            $this->db->query("UPDATE Medewerkers SET Naam = :naam, Functie = :functie, Afdeling = :afdeling WHERE Id = :id");
+            $this->db->bind(':naam', $data['naam'], PDO::PARAM_STR);
+            $this->db->bind(':functie', $data['functie'], PDO::PARAM_STR);
+            $this->db->bind(':afdeling', $data['afdeling'], PDO::PARAM_STR);
+            $this->db->bind(':id', $id, PDO::PARAM_INT);
+            return $this->db->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            if ($this->db === null) {
+                return false;
+            }
+            $this->db->query("DELETE FROM Medewerkers WHERE Id = :id");
+            $this->db->bind(':id', $id, PDO::PARAM_INT);
+            return $this->db->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
