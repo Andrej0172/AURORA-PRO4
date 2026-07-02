@@ -42,6 +42,18 @@ function renderTable(data) {
   tbody.innerHTML = data.map((m, i) => {
     const c = avatarColors[i % avatarColors.length];
     const badgeClass = afdelingClass[m.afdeling] || 'badge-artistiek';
+    const actions = m.id
+      ? `<div class="action-buttons">
+        <a href="${baseUrl}wijzigen/${m.id}" class="btn-action btn-edit" title="Wijzigen">
+          <i class="ti ti-edit"></i>
+        </a>
+        <form action="${baseUrl}verwijderen/${m.id}" method="POST" style="display:inline;" onsubmit="return confirm('Weet u zeker dat u deze medewerker wilt verwijderen?');">
+          <button type="submit" class="btn-action btn-delete" title="Verwijderen">
+            <i class="ti ti-trash"></i>
+          </button>
+        </form>
+      </div>` : '<span class="text-muted">-</span>';
+
     return `
       <tr>
         <td>
@@ -52,6 +64,7 @@ function renderTable(data) {
         </td>
         <td>${m.functie}</td>
         <td><span class="badge ${badgeClass}">${m.afdeling}</span></td>
+        <td>${actions}</td>
       </tr>`;
   }).join('');
 }
@@ -68,7 +81,7 @@ function filterTable() {
 }
 
 // Haal medewerkers op van de server en toon ze in de tabel
-fetch(dataUrl)
+fetch(baseUrl + 'data')
   .then(res => {
     if (!res.ok) throw new Error('Networkfout: ' + res.status);
     return res.json();
